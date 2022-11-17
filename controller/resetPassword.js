@@ -13,7 +13,7 @@ const resetPassword = async (req, res) => {
             return res.status(404).json({ message: "No user found with this ID" })
         }
         const pass = await argon2.hash(password)
-        const newPass = await User.findByIdAndUpdate(id, { password: password })
+        const newPass = await User.findByIdAndUpdate(id, { password: pass }).select("-password")
         res.status(200).json(newPass)
     } catch (error) {
         res.status(500).json({ message: "An error occurred" })
