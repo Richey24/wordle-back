@@ -19,6 +19,10 @@ const userSchema = new mongoose.Schema({
         type: String,
         required: true
     },
+    tribe: {
+        type: String,
+        required: false
+    },
     createdAt: {
         type: Date,
         required: true
