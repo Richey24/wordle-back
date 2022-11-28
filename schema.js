@@ -20,7 +20,7 @@ const userSchema = new mongoose.Schema({
         required: true
     },
     tribe: {
-        type: String,
+        type: Array,
         required: false
     },
     createdAt: {
