@@ -30,6 +30,22 @@ const userSchema = new mongoose.Schema({
     updatedAt: {
         type: Date,
         required: false
+    },
+    wordQuestScore: {
+        type: Number,
+        require: false
+    },
+    bibleQuestScore: {
+        type: Number,
+        require: false
+    },
+    bibleGameScore: {
+        type: Number,
+        require: false
+    },
+    hangmanScore: {
+        type: Number,
+        require: false
     }
 })
 
