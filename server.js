@@ -2,6 +2,7 @@ const express = require("express")
 const cors = require("cors")
 const mongoose = require("mongoose");
 const userRoute = require("./routes/userRoutes");
+const resetScore = require("./utils/cron");
 require("dotenv").config({ path: ".env" })
 const app = express()
 
@@ -16,6 +17,7 @@ try {
         useUnifiedTopology: true,
     });
     app.listen(port, () => console.log(`listening at ${port}`));
+    resetScore()
 } catch (error) {
     console.log(error);
 }

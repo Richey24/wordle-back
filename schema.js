@@ -46,9 +46,54 @@ const userSchema = new mongoose.Schema({
     hangmanScore: {
         type: Number,
         require: false
+    },
+    dailyWQS: {
+        type: Number,
+        require: false
+    },
+    dailyBQS: {
+        type: Number,
+        require: false
+    },
+    dailyBGS: {
+        type: Number,
+        require: false
+    },
+    dailyHS: {
+        type: Number,
+        require: false
     }
 })
 
+const swordSchema = new mongoose.Schema({
+    searchText: {
+        type: String
+    },
+    precepts: {
+        type: String
+    },
+    note: {
+        type: String
+    },
+    preceptsWithText: {
+        type: String
+    },
+    createdBy: {
+        type: String
+    },
+    createdDate: {
+        type: Date
+    },
+    LastUpdatedBy: {
+        type: String
+    },
+    LastUpdatedDate: {
+        type: Date
+    },
+})
+
 const User = mongoose.model("User", userSchema)
+const Sword = mongoose.model("Sword", swordSchema)
 
 module.exports = User
+module.exports = Sword
