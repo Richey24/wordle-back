@@ -66,28 +66,25 @@ const userSchema = new mongoose.Schema({
 })
 
 const swordSchema = new mongoose.Schema({
-    searchText: {
+    topic: {
         type: String
     },
-    precepts: {
-        type: String
+    scripture: {
+        type: Array
     },
     note: {
-        type: String
-    },
-    preceptsWithText: {
         type: String
     },
     createdBy: {
         type: String
     },
-    createdDate: {
+    createdAt: {
         type: Date
     },
-    LastUpdatedBy: {
+    updatedBy: {
         type: String
     },
-    LastUpdatedDate: {
+    updatedAt: {
         type: Date
     },
 })

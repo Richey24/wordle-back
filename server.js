@@ -3,6 +3,7 @@ const cors = require("cors")
 const mongoose = require("mongoose");
 const userRoute = require("./routes/userRoutes");
 const resetScore = require("./utils/cron");
+const swordRoutes = require("./routes/swordRoutes");
 require("dotenv").config({ path: ".env" })
 const app = express()
 
@@ -24,3 +25,4 @@ try {
 
 app.get("/", (req, res) => res.send("Hello world"))
 app.use("/user", userRoute)
+app.use("/sword", swordRoutes)
