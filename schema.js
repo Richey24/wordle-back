@@ -75,6 +75,9 @@ const swordSchema = new mongoose.Schema({
     note: {
         type: String
     },
+    userId: {
+        type: String
+    },
     createdBy: {
         type: String
     },
