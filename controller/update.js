@@ -1,4 +1,4 @@
-const User = require("../schema")
+const { User } = require("../schema")
 
 const updateUser = async (req, res) => {
     try {

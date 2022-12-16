@@ -92,8 +92,7 @@ const swordSchema = new mongoose.Schema({
     },
 })
 
-const User = mongoose.model("User", userSchema)
-const Sword = mongoose.model("Sword", swordSchema)
+const User = mongoose.model("User", userSchema, 'user')
+const Sword = mongoose.model("Sword", swordSchema, 'sword')
 
-module.exports = User
-module.exports = Sword
+module.exports = { User, Sword }

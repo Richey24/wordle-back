@@ -1,4 +1,4 @@
-const User = require("../schema")
+const { User } = require("../schema")
 const argon2 = require("argon2")
 
 const register = async (req, res) => {

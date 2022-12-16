@@ -6,7 +6,7 @@ const login = require("../controller/login")
 const register = require("../controller/register")
 const resetPassword = require("../controller/resetPassword")
 const updateUser = require("../controller/update")
-const User = require("../schema")
+const { User } = require("../schema")
 
 const userRoute = express.Router()
 

@@ -1,4 +1,4 @@
-const Sword = require("../schema")
+const { Sword } = require("../schema")
 
 const updateSword = async (req, res) => {
     try {

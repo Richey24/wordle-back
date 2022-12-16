@@ -1,5 +1,5 @@
 const sendMail = require("../mailer")
-const User = require("../schema")
+const { User } = require("../schema")
 
 const getWithEmail = async (req, res) => {
     const { email } = req.body
