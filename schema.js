@@ -23,6 +23,9 @@ const userSchema = new mongoose.Schema({
         type: Array,
         required: false
     },
+    admin: {
+        type: Boolean
+    },
     createdAt: {
         type: Date,
         required: true
@@ -78,6 +81,9 @@ const swordSchema = new mongoose.Schema({
     userId: {
         type: String
     },
+    admin: {
+        type: Boolean
+    },
     createdBy: {
         type: String
     },
@@ -92,7 +98,14 @@ const swordSchema = new mongoose.Schema({
     },
 })
 
+const auditSchema = new mongoose.Schema({
+    audit: {
+        type: String
+    }
+})
+
 const User = mongoose.model("User", userSchema, 'user')
 const Sword = mongoose.model("Sword", swordSchema, 'sword')
+const Audit = mongoose.model("Audit", auditSchema, 'audit')
 
-module.exports = { User, Sword }
+module.exports = { User, Sword, Audit }
