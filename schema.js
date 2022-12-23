@@ -26,6 +26,12 @@ const userSchema = new mongoose.Schema({
     admin: {
         type: Boolean
     },
+    paid: {
+        type: Boolean
+    },
+    expiryDate: {
+        type: Date
+    },
     createdAt: {
         type: Date,
         required: true
