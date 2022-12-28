@@ -113,8 +113,21 @@ const auditSchema = new mongoose.Schema({
     }
 })
 
+const quizSchema = new mongoose.Schema({
+    question: {
+        type: String
+    },
+    answer: {
+        type: Array
+    },
+    learnMore: {
+        type: String
+    }
+})
+
 const User = mongoose.model("User", userSchema, 'user')
 const Sword = mongoose.model("Sword", swordSchema, 'sword')
 const Audit = mongoose.model("Audit", auditSchema, 'audit')
+const Quiz = mongoose.model("Quiz", quizSchema, "quiz")
 
-module.exports = { User, Sword, Audit }
+module.exports = { User, Sword, Audit, Quiz }
