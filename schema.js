@@ -26,7 +26,7 @@ const userSchema = new mongoose.Schema({
     admin: {
         type: Boolean
     },
-    paid: {
+    superAdmin: {
         type: Boolean
     },
     expiryDate: {
@@ -88,6 +88,9 @@ const swordSchema = new mongoose.Schema({
         type: String
     },
     admin: {
+        type: Boolean
+    },
+    toBeDeleted: {
         type: Boolean
     },
     createdBy: {
