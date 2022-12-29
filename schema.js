@@ -122,12 +122,28 @@ const quizSchema = new mongoose.Schema({
     },
     learnMore: {
         type: String
+    },
+    toBeDeleted: {
+        type: Boolean
     }
+})
+
+const quizScoreSchema = new mongoose.Schema({
+    playerName: {
+        type: String
+    },
+    tribe: {
+        type: String
+    },
+    score: {
+        type: String
+    },
 })
 
 const User = mongoose.model("User", userSchema, 'user')
 const Sword = mongoose.model("Sword", swordSchema, 'sword')
 const Audit = mongoose.model("Audit", auditSchema, 'audit')
 const Quiz = mongoose.model("Quiz", quizSchema, "quiz")
+const Score = mongoose.model("Score", quizScoreSchema, "score")
 
-module.exports = { User, Sword, Audit, Quiz }
+module.exports = { User, Sword, Audit, Quiz, Score }
