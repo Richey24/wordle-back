@@ -11,6 +11,6 @@ quizRoutes.post("/create", createQuiz)
 quizRoutes.get("/get/all", getAllQuiz)
 quizRoutes.get("/get/one/:id", getOneQuiz)
 quizRoutes.put("/update/:id", updateQuiz)
-quizRoutes.delete("delete/:id", deleteQuiz)
+quizRoutes.delete("/delete/:id", deleteQuiz)
 
 module.exports = quizRoutes
