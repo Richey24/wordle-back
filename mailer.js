@@ -5,8 +5,8 @@ const sendMail = async (email, id, username) => {
     let transporter = nodemailer.createTransport({
         service: "Outlook365",
         auth: {
-            user: process.env.EMAIL,
-            pass: process.env.PASSWORD
+            user: "info@israelbiblecamp.com",
+            pass: "Hab0gl0b0tribin$"
         },
     });
     await transporter.sendMail({
