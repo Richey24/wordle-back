@@ -60,6 +60,9 @@ const userSchema = new mongoose.Schema({
     playedTrivial: {
         type: Boolean
     },
+    playedBible: {
+        type: Boolean
+    },
     dailyHS: {
         type: Number,
         require: false
