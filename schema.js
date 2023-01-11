@@ -35,6 +35,9 @@ const userSchema = new mongoose.Schema({
     expiryDate: {
         type: Date
     },
+    paid: {
+        type: Boolean
+    },
     createdAt: {
         type: Date,
         required: true
@@ -42,22 +45,6 @@ const userSchema = new mongoose.Schema({
     updatedAt: {
         type: Date,
         required: false
-    },
-    wordQuestScore: {
-        type: Number,
-        require: false
-    },
-    bibleQuestScore: {
-        type: Number,
-        require: false
-    },
-    bibleGameScore: {
-        type: Number,
-        require: false
-    },
-    hangmanScore: {
-        type: Number,
-        require: false
     },
     dailyWQS: {
         type: Number,
@@ -67,9 +54,11 @@ const userSchema = new mongoose.Schema({
         type: Number,
         require: false
     },
-    dailyBGS: {
-        type: Number,
-        require: false
+    playedHang: {
+        type: Boolean
+    },
+    playedTrivial: {
+        type: Boolean
     },
     dailyHS: {
         type: Number,
