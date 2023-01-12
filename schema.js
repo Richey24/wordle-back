@@ -54,6 +54,10 @@ const userSchema = new mongoose.Schema({
         type: Number,
         require: false
     },
+    dailyHS: {
+        type: Number,
+        require: false
+    },
     playedHang: {
         type: Boolean
     },
@@ -62,10 +66,6 @@ const userSchema = new mongoose.Schema({
     },
     playedBible: {
         type: Boolean
-    },
-    dailyHS: {
-        type: Number,
-        require: false
     }
 })
 
