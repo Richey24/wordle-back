@@ -140,5 +140,13 @@ const Sword = mongoose.model("Sword", swordSchema, 'sword')
 const Audit = mongoose.model("Audit", auditSchema, 'audit')
 const Quiz = mongoose.model("Quiz", quizSchema, "quiz")
 const Score = mongoose.model("Score", quizScoreSchema, "score")
+const Word = mongoose.model(
+    'words',
+    new mongoose.Schema({
+        word: String,
+        count: Number
+    })
+);
 
-module.exports = { User, Sword, Audit, Quiz, Score }
+
+module.exports = { User, Sword, Audit, Quiz, Score, Word }
