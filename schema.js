@@ -64,6 +64,10 @@ const userSchema = new mongoose.Schema({
     playedTrivial: {
         type: Boolean
     },
+    sound: {
+        type: Boolean,
+        default: true
+    },
     playedBible: {
         type: Boolean
     }
