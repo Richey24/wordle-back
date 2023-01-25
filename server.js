@@ -8,6 +8,7 @@ const auditRoutes = require("./routes/auditRoutes");
 const quizRoutes = require("./routes/quizRoutes");
 const scoreRoutes = require("./routes/scoreRoutes");
 const wordRoutes = require("./routes/wordRoute");
+const subRoutes = require("./routes/subRoute");
 require("dotenv").config({ path: ".env" })
 const app = express()
 
@@ -34,3 +35,4 @@ app.use("/audit", auditRoutes)
 app.use("/quiz", quizRoutes)
 app.use("/score", scoreRoutes)
 app.use("/word", wordRoutes)
+app.use("/sub", subRoutes)
