@@ -18,7 +18,7 @@ const sendMail = async (email, id, username) => {
             <br>
             <p><b>A request has been received to change the password for your account</b></p>
             <br>
-            <a style="color: blue; text-decoration: none" href="http://localhost:3000/reset/${id}">Reset</a>
+            <a style="color: blue; text-decoration: none" href="https://www.israelbiblecamp.world/reset/${id}">Reset</a>
             <br>
             <p>If you did not initiate this request, please ignore this email</p>
             <br>
