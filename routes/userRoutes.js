@@ -30,7 +30,7 @@ userRoute.post("/reset/send", getWithEmail)
 userRoute.post("/reset/password/:id", resetPassword)
 userRoute.put("/update/:id", restrict, updateUser)
 userRoute.delete("/delete/:id", restrict, deleteUser)
-userRoute.post("/confirm", confirmUser)
+userRoute.post("/confirm/:id", confirmUser)
 userRoute.get("/find/all", restrict, async (req, res) => {
     try {
         const users = await User.find({}).select("-password")
