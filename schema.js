@@ -22,6 +22,10 @@ const userSchema = new mongoose.Schema({
     mainToken: {
         type: String
     },
+    confirmed: {
+        type: Boolean,
+        default: false
+    },
     tribe: {
         type: Array,
         required: false
