@@ -18,7 +18,7 @@ const confirmMail = async (email, id, username) => {
             <br>
             <p><b>Thanks for registering your account click the link below to verify your account</b></p>
             <br>
-            <a style="color: blue; text-decoration: none" href="http://localhost:3000/verify/${id}">Verify</a>
+            <a style="color: blue; text-decoration: none" href="https://www.israelbiblecamp.world/verify/${id}">Verify</a>
             <br>
             <p>If you did not initiate this request, please ignore this email</p>
             <br>
