@@ -22,6 +22,12 @@ const userSchema = new mongoose.Schema({
     mainToken: {
         type: String
     },
+    church: {
+        type: String
+    },
+    country: {
+        type: Array
+    },
     confirmed: {
         type: Boolean,
         default: false
