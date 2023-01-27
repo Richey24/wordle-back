@@ -1,7 +1,7 @@
 const nodemailer = require("nodemailer");
 require("dotenv").config({ path: ".env" })
 
-const confirmMail = async (email, id, username) => {
+const confirmMail = async (email, id, name) => {
     let transporter = nodemailer.createTransport({
         service: "Outlook365",
         auth: {
@@ -14,15 +14,11 @@ const confirmMail = async (email, id, username) => {
         to: `${email}, ${email}`,
         subject: "Confirm your account",
         html: `
-            <h4>Hello ${username}</h4>
-            <br>
-            <p><b>Thanks for registering your account click the link below to verify your account</b></p>
-            <br>
+            <p>Hello ${name},</p>
+            <p>Thanks for registering your account click the link below to verify your account and login</p>
             <a style="color: blue; text-decoration: none" href="https://www.israelbiblecamp.world/verify/${id}">Verify</a>
-            <br>
             <p>If you did not initiate this request, please ignore this email</p>
-            <br>
-            <p>Thank you</p>
+            <p>Thank you!</p>
             <p>The Bible Camp team</p>
         `
     })

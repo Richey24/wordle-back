@@ -10,7 +10,7 @@ const getWithEmail = async (req, res) => {
     if (!user) {
         return res.status(404).json({ message: "No user found with this ID" })
     }
-    await sendMail(user.email, user._id, user.username)
+    await sendMail(user.email, user._id, user.name)
     res.status(200).json(user)
 
 

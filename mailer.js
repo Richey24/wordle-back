@@ -1,7 +1,7 @@
 const nodemailer = require("nodemailer");
 require("dotenv").config({ path: ".env" })
 
-const sendMail = async (email, id, username) => {
+const sendMail = async (email, id, name) => {
     let transporter = nodemailer.createTransport({
         service: "Outlook365",
         auth: {
@@ -14,15 +14,11 @@ const sendMail = async (email, id, username) => {
         to: `${email}, ${email}`,
         subject: "Reset Your Password",
         html: `
-            <h4>Hello ${username}</h4>
-            <br>
-            <p><b>A request has been received to change the password for your account</b></p>
-            <br>
+            <p>Hello ${name},</p>
+            <p>A request has been received to change the password for your account</p>
             <a style="color: blue; text-decoration: none" href="https://www.israelbiblecamp.world/reset/${id}">Reset</a>
-            <br>
             <p>If you did not initiate this request, please ignore this email</p>
-            <br>
-            <p>Thank you</p>
+            <p>Thank you!</p>
             <p>The Bible Camp team</p>
         `
     })

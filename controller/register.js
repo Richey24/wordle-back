@@ -23,7 +23,7 @@ const register = async (req, res) => {
         const user = await User.create(body)
         const token = jwt.sign({ id: user._id }, "rich", { expiresIn: "10h" })
         const mainUser = await User.findByIdAndUpdate(user._id, { mainToken: token }, { new: true }).select("-password")
-        await confirmMail(user.email, user._id, user.username)
+        await confirmMail(user.email, user._id, user.name)
         res.status(200).json(mainUser)
     } catch (error) {
         res.status(500).json({ message: "An error occurred" })
