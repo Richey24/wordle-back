@@ -1,14 +1,12 @@
-const { default: Stripe } = require("stripe")
-const stripe = new Stripe("sk_test_b9ZI3TPxqAeVBN82D4RyBws4")
+const stripe = require("stripe")("sk_test_b9ZI3TPxqAeVBN82D4RyBws4")
 
 const subUser = async (req, res) => {
     const { email, paymentMethod, plan } = req.body
-
     const customer = await stripe.customers.create({
-        payment_method: paymentMethod,
+        payment_method: paymentMethod.id,
         email: email,
         invoice_settings: {
-            default_payment_method: paymentMethod
+            default_payment_method: paymentMethod.id
         }
     })
 
@@ -16,7 +14,7 @@ const subUser = async (req, res) => {
         const theSub = await stripe.subscriptions.create({
             customer: customer.id,
             items: [{ plan: "price_1MOWZ4Bf3U2rieTNTdSbfnE1" }],
-            expand: ["latest_invoice_payment_intent"]
+            expand: ["latest_invoice.payment_intent"]
         })
         const status = theSub.latest_invoice.payment_intent.status
         const clientSecret = theSub.latest_invoice.payment_intent.client_secret
