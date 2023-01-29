@@ -5,8 +5,8 @@ const confirmMail = async (email, id, name) => {
     let transporter = nodemailer.createTransport({
         service: "Outlook365",
         auth: {
-            user: "info@israelbiblecamp.com",
-            pass: "Hab0gl0b0tribin$"
+            user: process.env.EMAIL,
+            pass: process.env.PASSWORD
         },
     });
     await transporter.sendMail({

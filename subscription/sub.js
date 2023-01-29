@@ -14,7 +14,7 @@ const subUser = async (req, res) => {
 
     const theSub = await stripe.subscriptions.create({
         customer: customer.id,
-        items: [{ plan: "" }],
+        items: [{ plan: "price_1MOWZ4Bf3U2rieTNpRX5UYTO" }],
         expand: ["latest_invoice_payment_intent"]
     })
 }
