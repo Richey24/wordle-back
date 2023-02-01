@@ -48,6 +48,9 @@ const userSchema = new mongoose.Schema({
     paid: {
         type: Boolean
     },
+    customerID: {
+        type: String
+    },
     createdAt: {
         type: Date,
         required: true
