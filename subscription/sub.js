@@ -22,8 +22,10 @@ const subUser = async (req, res) => {
         })
         const status = theSub.latest_invoice.payment_intent.status
         const clientSecret = theSub.latest_invoice.payment_intent.client_secret
-        const oneMonthDate = new Date(new Date().setMonth(new Date().getMonth() + 1))
-        await User.findOneAndUpdate({ email: email }, { expiryDate: oneMonthDate })
+        if (status !== "requires_action") {
+            const oneMonthDate = new Date(new Date().setMonth(new Date().getMonth() + 1))
+            await User.findOneAndUpdate({ email: email }, { expiryDate: oneMonthDate, paid: true })
+        }
         res.status(200).json({ status: status, clientSecret: clientSecret })
     } else if (plan === "yearly") {
         const theSub = await stripe.subscriptions.create({
@@ -33,8 +35,10 @@ const subUser = async (req, res) => {
         })
         const status = theSub.latest_invoice.payment_intent.status
         const clientSecret = theSub.latest_invoice.payment_intent.client_secret
-        const oneYearDate = new Date(new Date().setMonth(new Date().getMonth() + 12))
-        await User.findOneAndUpdate({ email: email }, { expiryDate: oneYearDate })
+        if (status !== "requires_action") {
+            const oneYearDate = new Date(new Date().setMonth(new Date().getMonth() + 12))
+            await User.findOneAndUpdate({ email: email }, { expiryDate: oneYearDate, paid: true })
+        }
         res.status(200).json({ status: status, clientSecret: clientSecret })
     }
 }
