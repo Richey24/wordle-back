@@ -1,9 +1,11 @@
 const mongoose = require("mongoose")
 
 const userSchema = new mongoose.Schema({
-    name: {
+    firstName: {
         type: String,
-        required: true
+    },
+    lastName: {
+        type: String,
     },
     email: {
         type: String,
@@ -49,6 +51,12 @@ const userSchema = new mongoose.Schema({
         type: Boolean
     },
     customerID: {
+        type: String
+    },
+    subscriptionID: {
+        type: String
+    },
+    plan: {
         type: String
     },
     createdAt: {
@@ -152,11 +160,31 @@ const quizScoreSchema = new mongoose.Schema({
     },
 })
 
+const cartSchema = new mongoose.Schema({
+    sessionID: {
+        type: String
+    },
+    email: {
+        type: String
+    },
+    plan: {
+        type: String
+    },
+    date: {
+        type: Date,
+        default: Date.now()
+    },
+    userID: {
+        type: String
+    }
+})
+
 const User = mongoose.model("User", userSchema, 'user')
 const Sword = mongoose.model("Sword", swordSchema, 'sword')
 const Audit = mongoose.model("Audit", auditSchema, 'audit')
 const Quiz = mongoose.model("Quiz", quizSchema, "quiz")
 const Score = mongoose.model("Score", quizScoreSchema, "score")
+const Cart = mongoose.model("Cart", cartSchema, "cart")
 const Word = mongoose.model(
     'words',
     new mongoose.Schema({
@@ -166,4 +194,4 @@ const Word = mongoose.model(
 );
 
 
-module.exports = { User, Sword, Audit, Quiz, Score, Word }
+module.exports = { User, Sword, Audit, Quiz, Score, Word, Cart }

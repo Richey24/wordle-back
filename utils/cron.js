@@ -2,7 +2,7 @@ const cron = require("node-cron")
 const { User, Score } = require("../schema")
 
 const resetScore = () => {
-    cron.schedule("0 0 * * *", async () => {
+    cron.schedule("5 8 * * 0", async () => {
         const users = await User.find({})
         users.forEach(async (user) => {
             await User.findByIdAndUpdate(user._id, { dailyWQS: 0 })

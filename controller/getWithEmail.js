@@ -1,4 +1,4 @@
-const sendMail = require("../mailer")
+const sendMail = require("../mail/mailer")
 const { User } = require("../schema")
 
 const getWithEmail = async (req, res) => {
@@ -10,7 +10,7 @@ const getWithEmail = async (req, res) => {
     if (!user) {
         return res.status(404).json({ message: "No user found with this ID" })
     }
-    await sendMail(user.email, user._id, user.name)
+    await sendMail(user.email, user._id, user.firstName)
     res.status(200).json(user)
 
 

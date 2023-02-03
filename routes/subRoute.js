@@ -1,8 +1,8 @@
 const express = require("express")
-const subUser = require("../subscription/sub")
+const getCart = require("../subscription/getCart")
 
 const subRoutes = express.Router()
 
-subRoutes.post("/new", subUser)
+subRoutes.post("/get", getCart)
 
 module.exports = subRoutes
