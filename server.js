@@ -29,10 +29,10 @@ app.use((req, res, next) => {
 });
 
 try {
-    // mongoose.connect(process.env.MONGO_URL, {
-    //     useNewUrlParser: true,
-    //     useUnifiedTopology: true,
-    // });
+    mongoose.connect(process.env.MONGO_URL, {
+        useNewUrlParser: true,
+        useUnifiedTopology: true,
+    });
     app.listen(port, () => console.log(`listening at ${port}`));
     resetScore()
 } catch (error) {
