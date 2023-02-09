@@ -9,6 +9,7 @@ const updateUser = require("../controller/update")
 const { User } = require("../schema")
 const jwt = require("jsonwebtoken")
 const { promisify } = require("util")
+const confirmUser = require("../controller/confirm")
 
 const userRoute = express.Router()
 
@@ -25,10 +26,11 @@ const restrict = async (req, res, next) => {
 userRoute.post("/register", register)
 userRoute.post("/login", login)
 userRoute.get("/get/:id", restrict, getOne)
-userRoute.post("/reset/send", restrict, getWithEmail)
-userRoute.post("/reset/password/:id", restrict, resetPassword)
+userRoute.post("/reset/send", getWithEmail)
+userRoute.post("/reset/password/:id", resetPassword)
 userRoute.put("/update/:id", restrict, updateUser)
 userRoute.delete("/delete/:id", restrict, deleteUser)
+userRoute.post("/confirm/:id", confirmUser)
 userRoute.get("/find/all", restrict, async (req, res) => {
     try {
         const users = await User.find({}).select("-password")

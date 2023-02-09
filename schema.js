@@ -1,9 +1,11 @@
 const mongoose = require("mongoose")
 
 const userSchema = new mongoose.Schema({
-    name: {
+    firstName: {
         type: String,
-        required: true
+    },
+    lastName: {
+        type: String,
     },
     email: {
         type: String,
@@ -22,6 +24,16 @@ const userSchema = new mongoose.Schema({
     mainToken: {
         type: String
     },
+    church: {
+        type: String
+    },
+    country: {
+        type: Array
+    },
+    confirmed: {
+        type: Boolean,
+        default: false
+    },
     tribe: {
         type: Array,
         required: false
@@ -35,6 +47,18 @@ const userSchema = new mongoose.Schema({
     expiryDate: {
         type: Date
     },
+    paid: {
+        type: Boolean
+    },
+    customerID: {
+        type: String
+    },
+    subscriptionID: {
+        type: String
+    },
+    plan: {
+        type: String
+    },
     createdAt: {
         type: Date,
         required: true
@@ -42,22 +66,6 @@ const userSchema = new mongoose.Schema({
     updatedAt: {
         type: Date,
         required: false
-    },
-    wordQuestScore: {
-        type: Number,
-        require: false
-    },
-    bibleQuestScore: {
-        type: Number,
-        require: false
-    },
-    bibleGameScore: {
-        type: Number,
-        require: false
-    },
-    hangmanScore: {
-        type: Number,
-        require: false
     },
     dailyWQS: {
         type: Number,
@@ -67,13 +75,22 @@ const userSchema = new mongoose.Schema({
         type: Number,
         require: false
     },
-    dailyBGS: {
-        type: Number,
-        require: false
-    },
     dailyHS: {
         type: Number,
         require: false
+    },
+    playedHang: {
+        type: Boolean
+    },
+    playedTrivial: {
+        type: Boolean
+    },
+    sound: {
+        type: Boolean,
+        default: true
+    },
+    playedBible: {
+        type: Boolean
     }
 })
 
@@ -143,10 +160,38 @@ const quizScoreSchema = new mongoose.Schema({
     },
 })
 
+const cartSchema = new mongoose.Schema({
+    sessionID: {
+        type: String
+    },
+    email: {
+        type: String
+    },
+    plan: {
+        type: String
+    },
+    date: {
+        type: Date,
+        default: Date.now()
+    },
+    userID: {
+        type: String
+    }
+})
+
 const User = mongoose.model("User", userSchema, 'user')
 const Sword = mongoose.model("Sword", swordSchema, 'sword')
 const Audit = mongoose.model("Audit", auditSchema, 'audit')
 const Quiz = mongoose.model("Quiz", quizSchema, "quiz")
 const Score = mongoose.model("Score", quizScoreSchema, "score")
+const Cart = mongoose.model("Cart", cartSchema, "cart")
+const Word = mongoose.model(
+    'words',
+    new mongoose.Schema({
+        word: String,
+        count: Number
+    })
+);
 
-module.exports = { User, Sword, Audit, Quiz, Score }
+
+module.exports = { User, Sword, Audit, Quiz, Score, Word, Cart }

@@ -15,6 +15,8 @@ const restrict = async (req, res, next) => {
     }
 }
 
-router.post('/gameActivity', activityController.createActivity);
+router.post('/game-activity', activityController.createActivity);
+// router.get('/game-activity',  activityController.getActivity);
+
 
 module.exports = router;

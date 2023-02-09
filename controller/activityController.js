@@ -9,15 +9,16 @@ const Level = require('../models/GameLevel');
  */
 exports.createActivity = async (req, res) => {
 
-   const user = req.userData();
+   const user = req.userData;
 
+   
 	const activity = new Activity({
 		user_id: req.body.user,
 		score: req.body.score,
 		levels: req.body.levels, // get user levels by user id
 		status: req.body.status,
 		game_id: req.body.game_id,
-		time: req.body.time
+		time: req.body.time 
 	});
 
   	let data = await activity.save();
@@ -26,5 +27,5 @@ exports.createActivity = async (req, res) => {
 
 exports.getUserActivity = async (req, res) => {}
 
-exports.getUserLevel = async ( req,res ) => {}
+exports.getUserLevel    = async ( req,res ) => {}
 
