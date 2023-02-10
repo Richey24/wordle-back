@@ -3,8 +3,6 @@ const { promises: fsPromises} = require('fs');
 
 
 exports.seedWords = async () => {
-
-	console.log('working')
 	asyncReadFile('./assets/bank.txt').then(r => console.log("file loaded"));
 }
 

@@ -11,18 +11,16 @@ exports.createActivity = async (req, res) => {
 
    const user = req.userData;
 
-   
-	const activity = new Activity({
-		user_id: req.body.user,
-		score: req.body.score,
-		levels: req.body.levels, // get user levels by user id
-		status: req.body.status,
-		game_id: req.body.game_id,
-		time: req.body.time 
-	});
+	// const activity = new Activity({
+	// 	score: req.body.score,
+	// 	levels: req.body.levels, // get user levels by user id
+	// 	status: req.body.status,
+	// 	game_id: req.body.game_id,
+	// 	time: req.body.time 
+	// });
 
-  	let data = await activity.save();
-	res.status(201).json({data: data})
+  	// let data = await activity.save();
+	res.status(201).json({data: user})
 }
 
 exports.getUserActivity = async (req, res) => {}

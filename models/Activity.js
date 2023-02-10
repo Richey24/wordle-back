@@ -29,8 +29,5 @@ const activitySchema = mongoose.Schema({
 	time: { type: Number }
 });
 
-
-
-
-
-
+const activity = mongoose.model("Activity", activitySchema);
+module.exports = activity;

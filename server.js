@@ -11,8 +11,7 @@ const wordRoutes = require("./routes/wordRoute");
 const subRoutes = require("./routes/subRoute");
 const { Cart, User } = require("./schema");
 const failedSubMail = require("./mail/failedSubMail");
-const crosswordPuzzle = require('./routes/crosswordRoutes');
-const gameActivity = require('./routes/activityRoutes');
+const activityRoutes = require('./routes/activityRoutes');
 
 const Seeder = require('./seeders/wordsSeeder');
 require("dotenv").config({ path: ".env" })
@@ -43,7 +42,6 @@ try {
     console.log(error);
 }
 
-
 // Seeder.seedWords();
 
 app.get("/", (req, res) => res.send("Hello world"))
@@ -54,7 +52,7 @@ app.use("/quiz", quizRoutes)
 app.use("/score", scoreRoutes)
 app.use("/word", wordRoutes)
 app.use("/sub", subRoutes)
-app.use("/api/game-activities", gameActivity)
+app.use("/api/activities", activityRoutes)
 
 const YOUR_DOMAIN = "http://localhost:3000/subscription"
 

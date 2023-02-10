@@ -14,4 +14,4 @@ const confirmUser = async (req, res) => {
 
 }
 
-module.exports = confirmUser
+module.exports = confirmUser   
