@@ -79,6 +79,10 @@ const userSchema = new mongoose.Schema({
         type: Number,
         require: false
     },
+    crosswordScore: {
+        type: Boolean,
+        default: 0
+    },
     playedHang: {
         type: Boolean
     },
