@@ -48,7 +48,7 @@ app.use("/score", scoreRoutes)
 app.use("/word", wordRoutes)
 app.use("/sub", subRoutes)
 
-const YOUR_DOMAIN = "http://localhost:3000/subscription"
+const YOUR_DOMAIN = "https://www.israelbiblecamp.world/subscription"
 
 app.post('/create-checkout-session', async (req, res) => {
     const { email, plan, id } = req.query
@@ -64,7 +64,7 @@ app.post('/create-checkout-session', async (req, res) => {
         success_url: `${YOUR_DOMAIN}?success=true`,
         cancel_url: `${YOUR_DOMAIN}?canceled=true`,
     });
-    await Cart.create({ sessionID: session.id, email: email, plan: plan, userID: id })
+    // await Cart.create({ sessionID: session.id, email: email, plan: plan, userID: id })
 
     res.redirect(303, session.url);
 });
@@ -85,33 +85,37 @@ app.post("/webhook", express.raw({ type: 'application/json' }), async (req, res)
         case "checkout.session.completed": {
             const session = event.data.object;
             console.log(session);
-            if (session.payment_status === 'paid') {
-                const customer = await Cart.findOne({ sessionID: session.id })
-                const expiryDate = customer.plan === "monthly" ? new Date(new Date().setMonth(new Date().getMonth() + 1)) : new Date(new Date().setMonth(new Date().getMonth() + 12))
-                await User.findOneAndUpdate({ email: customer.email }, { paid: true, expiryDate: expiryDate, customerID: session.customer, subscriptionID: session.subscription, plan: customer.plan })
-            }
+            // if (session.payment_status === 'paid') {
+            //     const customer = await Cart.findOne({ sessionID: session.id })
+            //     const expiryDate = customer.plan === "monthly" ? new Date(new Date().setMonth(new Date().getMonth() + 1)) : new Date(new Date().setMonth(new Date().getMonth() + 12))
+            //     await User.findOneAndUpdate({ email: customer.email }, { paid: true, expiryDate: expiryDate, customerID: session.customer, subscriptionID: session.subscription, plan: customer.plan })
+            // }
             break;
         }
         case "checkout.session.async_payment_succeeded": {
             const session = event.data.object;
-            const customer = await Cart.findOne({ sessionID: session.id })
-            const expiryDate = customer.plan === "monthly" ? new Date(new Date().setMonth(new Date().getMonth() + 1)) : new Date(new Date().setMonth(new Date().getMonth() + 12))
-            await User.findOneAndUpdate({ email: customer.email }, { paid: true, expiryDate: expiryDate, customerID: session.customer, subscriptionID: session.subscription, plan: customer.plan })
+            console.log(session);
+            // const customer = await Cart.findOne({ sessionID: session.id })
+            // const expiryDate = customer.plan === "monthly" ? new Date(new Date().setMonth(new Date().getMonth() + 1)) : new Date(new Date().setMonth(new Date().getMonth() + 12))
+            // await User.findOneAndUpdate({ email: customer.email }, { paid: true, expiryDate: expiryDate, customerID: session.customer, subscriptionID: session.subscription, plan: customer.plan })
         }
         case "checkout.session.async_payment_failed": {
             const session = event.data.object;
+            console.log(session);
             const customer = await Cart.findOne({ sessionID: session.id })
             failedSubMail(customer.email)
             break
         }
         case "invoice.payment_succeeded": {
             const invoice = event.data.object;
+            console.log(invoice);
             const user = await User.find({ customerID: invoice.customer })
             const expiryDate = user.plan === "monthly" ? new Date(new Date().setMonth(new Date().getMonth() + 1)) : new Date(new Date().setMonth(new Date().getMonth() + 12))
             await User.findOneAndUpdate({ customerID: invoice.customer }, { expiryDate: expiryDate })
         }
         case "invoice.payment_failed": {
             const invoice = event.data.object;
+            console.log(invoice);
             const user = await User.find({ customerID: invoice.customer })
             failedSubMail(user.email)
         }
