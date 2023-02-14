@@ -8,6 +8,8 @@ const router = express.Router();
 router.post("/crossword", auth, activityController.createActivity);
 router.get('/crossword', auth, activityController.getActivity);
 
+// Testing
+router.post('/update',  activityController.levelUserUp )
 module.exports = router;
 
 

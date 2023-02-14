@@ -23,15 +23,17 @@ exports.createActivity = async (req, res) => {
 		status: req.body.status,
 		game: req.body.game,
 		time: req.body.time,
-		date: new Date(),
+		date: new Date().toISOString().split('T')[0],
 	});
 
 	let data = await activity.save();
 
 	if (req.body.status) {
 	   console.log('check status')
-		response = await this.levelUserUp(user.id, req.body.game)
+		response = await this.levelUserUp(user.id, req.body.game, score)
 	}
+
+
 
 	res.status(201).json({data: data, levels: response})     
 }
@@ -51,30 +53,6 @@ exports.getActivity = async (req, res) => {
 	res.status(201).json({activities});
 }
 
-exports.updateHighScore = async () => {
-
-	const weekly = []
-
-	const today = new Date();
-
-	// ✅ Get the first day of the current week (Sunday)
-	const firstDay = new Date(today.setDate(today.getDate() - today.getDay()));
-
-	// ✅ Get the last day of the current week (Saturday)
-	const lastDay = new Date(today.setDate(today.getDate() - today.getDay() + 6));
-
-	console.log(firstDay); // 👉️ Sunday August 7 2022
-	console.log(lastDay); // 👉️ Saturday August 13 202
-
-	const highScore = UserScore.findOne({user_id: userId}, (err, obj) => {
-		if (obj === null) {
-			console.log("create highscores")
-			
-		}
-	})
-
-	const highscore = prototype.find({})
-}
 
 exports.getUserLevel  = async ( req,res ) => {}
 
@@ -109,31 +87,43 @@ exports.calculateScore = async function(levels, timeCompleted, score) {
  * This function check if the user game level exist then create or update
  * @return {[type]} [description]
  */
-exports.levelUserUp = async (userId, game) => {
+exports.levelUserUp = async (userID, game, score) => {
 
-	//check if game level exist
-	const level = Level.findOne({user_id: userId},  function(err, obj) { 
-		console.log(obj)
+	const today = new Date();
+	const parseDate = today.toISOString().split('T')[0];
 
-		 if (obj === null) {
-			 	console.log('creating levels data')
-				const gameLevel = new Level({
-					user_id: userId,
-					game: game,
-					level: 1,
-				});
-				gameLevel.save();
-		 } else {
-		 			console.log('updating user data')
-			 	const gameLevel = Level.findByIdAndUpdate(obj._id, {
-					level: obj.level + 1
-				}, (err, data) => {
-					console.log(err)
-					console.log(data)
-				})
-				gameLevel.updateOne();
-		 }
-	  }
-	)
+   // ✅ Get the first day of the current week (Sunday)
+	const firstDay = new Date(today.setDate(today.getDate() - today.getDay()));
 
+   // ✅ Get the last day of the current week (Saturday)
+	const lastDay = new Date(today.setDate(today.getDate() - today.getDay() + 6));
+
+   //check if game level exist
+	const highScore = await UserScore.findOne({ user: userID, created_at: {"$gte": firstDay.toISOString().split('T')[0], "$lt": lastDay.toISOString().split('T')[0]} }) 
+	
+	if ( highScore === null ) {
+		const saveHighScore = new UserScore({
+			user: userID,
+			game: game,
+			created_at: parseDate,
+			game_level: 1,
+			score: score
+		});
+
+		saveHighScore.save();
+	} else {
+	      console.log('updating user data')
+		 	const updateHighscore =  UserScore.findByIdAndUpdate(highScore._id, {
+				game_level: highScore.game_level + 1,
+				score: highScore.score + parseInt(score)
+			}, (err, data) => {
+				console.log(err)
+				console.log(data)
+			})
+
+			let update = updateHighscore.updateOne();
+
+	}
+
+	return true;
 }

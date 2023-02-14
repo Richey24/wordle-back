@@ -6,6 +6,10 @@ const userScoreSchema = mongoose.Schema({
 		ref: "User"
 	},
 
+	game: {
+		type: String
+	},
+
 	created_at: {
 		type: Date,
 	},

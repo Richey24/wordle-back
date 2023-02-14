@@ -1,1 +1,1 @@
-gameRoutes
+const gameActivity = require('./routes/activityRoutes');

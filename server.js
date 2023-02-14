@@ -57,6 +57,7 @@ app.use("/sub", subRoutes)
 app.use("/api/user", userRoute)
 app.use("/api/activities", activityRoutes)
 app.use("/api/leaderboard", leaderRoutes )
+app.use('/api/highscores', activityRoutes)
 
 const YOUR_DOMAIN = "http://localhost:3000/subscription"
 

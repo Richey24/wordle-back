@@ -149,12 +149,15 @@ const quizSchema = new mongoose.Schema({
 })
 
 const quizScoreSchema = new mongoose.Schema({
+   
     playerName: {
         type: String
     },
+
     tribe: {
         type: String
     },
+    
     score: {
         type: String
     },

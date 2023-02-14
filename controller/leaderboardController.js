@@ -1,6 +1,5 @@
-const Activity = require("../models/Activity");
 const { User } = require('../schema');
-
+const UserScore = require('../models/UserScore');
 
 /**
  * This function get user leadboard for each week
@@ -10,49 +9,20 @@ const { User } = require('../schema');
  */
 exports.getWeeklyLeaderboards = async (req, res) => {
 
-	let response = [];
-	const users = await User.find({}).then((users) => {
-	   users.forEach( async (values, keys) => {
-	        const scores = await this.getWeeklyScores()
-	        	let params = {
-					username: values.username,
-					email: values.email,
-					tribe: values.tribe[0],
-					country: values.country[0],
-			   		score: scores
-			  }
+  	const today = new Date();
+	const parseDate = today.toISOString().split('T')[0];
 
-			response.push(params);
-			
-		})
-	});
+   // ✅ Get the first day of the current week (Sunday)
+	const firstDay = new Date(today.setDate(today.getDate() - today.getDay()));
 
-	// console.log(activities);
+   // ✅ Get the last day of the current week (Saturday)
+	const lastDay = new Date(today.setDate(today.getDate() - today.getDay() + 6));
 
-  
-
-	console.log(response)
-
-	res.status(201).json({response});
+	if (req.body.offset) {
+		const highScore = await UserScore.find({ created_at: {"$gte": firstDay.toISOString().split('T')[0], "$lt": lastDay.toISOString().split('T')[0]} }).sort({ score: -1 }) 
+	}
+	
+	const highScore = await UserScore.find({ created_at: {"$gte": firstDay.toISOString().split('T')[0], "$lt": lastDay.toISOString().split('T')[0]} }).sort({ score: -1 })
+	res.status(201).json({ leadboard: highScore})
 }
 
-/**
- * This function get each user scores within a week
- * @param  {[type]} userId [description]
- * @return {[type]}        [description]
- */
-exports.getWeeklyScores = async () => {
-	new Promise(async (resolve, reject) => {
-		let response = 10
-
-		const activities = await Activity.find().then((res) => {
-			res.forEach((values, keys) => {
-				response = values.score
-			})
-		})
-		console.log(response)
-		resolve(response)
-		return response
-	})
-
-} 

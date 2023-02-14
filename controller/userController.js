@@ -1,5 +1,5 @@
 const { User } = require("../schema")
-const Level = require("../models/GameLevel");
+const UserScore = require("../models/UserScore");
 
 /**
  * This function login user information
@@ -18,7 +18,7 @@ exports.getUserInformation = async (req, res) => {
 exports.getUserGameData = async (req, res) => {
 	 
 	 const user = req.userData;
-	 const game = await Level.findOne({user_id: user.id})
+	 const game = await UserScore.findOne({user_id: user.id})
 	 
 	 return await res.json(game);
 }
