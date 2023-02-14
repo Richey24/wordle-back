@@ -12,6 +12,7 @@ const subRoutes = require("./routes/subRoute");
 const { Cart, User } = require("./schema");
 const failedSubMail = require("./mail/failedSubMail");
 const activityRoutes = require('./routes/activityRoutes');
+const leaderRoutes = require('./routes/leaderboardRoutes');
 
 const Seeder = require('./seeders/wordsSeeder');
 require("dotenv").config({ path: ".env" })
@@ -52,7 +53,10 @@ app.use("/quiz", quizRoutes)
 app.use("/score", scoreRoutes)
 app.use("/word", wordRoutes)
 app.use("/sub", subRoutes)
+
+app.use("/api/user", userRoute)
 app.use("/api/activities", activityRoutes)
+app.use("/api/leaderboard", leaderRoutes )
 
 const YOUR_DOMAIN = "http://localhost:3000/subscription"
 

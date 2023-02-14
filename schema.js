@@ -85,9 +85,6 @@ const userSchema = new mongoose.Schema({
     playedTrivial: {
         type: Boolean
     },
-    playedCross: {
-        type: Boolean
-    },
     sound: {
         type: Boolean,
         default: true

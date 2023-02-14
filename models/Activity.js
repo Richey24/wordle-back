@@ -21,13 +21,13 @@ const activitySchema = mongoose.Schema({
 	},
 	status: { type: Boolean },
 
-	game_id: {
-		type: mongoose.Schema.Types.ObjectId,
-		ref: "Game"
+	game: {
+	   type: String
 	},
 
 	time: { type: Number }
 });
+
 
 const activity = mongoose.model("Activity", activitySchema);
 module.exports = activity;

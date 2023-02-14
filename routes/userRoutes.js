@@ -10,7 +10,8 @@ const { User } = require("../schema")
 const jwt = require("jsonwebtoken")
 const { promisify } = require("util")
 const confirmUser = require("../controller/confirm")
-
+const userController = require('../controller/userController')
+const auth = require("../utils/auth");
 const userRoute = express.Router()
 
 const restrict = async (req, res, next) => {
@@ -29,6 +30,7 @@ userRoute.get("/get/:id", restrict, getOne)
 userRoute.post("/reset/send", getWithEmail)
 userRoute.post("/reset/password/:id", resetPassword)
 userRoute.put("/update/:id", restrict, updateUser)
+
 userRoute.delete("/delete/:id", restrict, deleteUser)
 userRoute.post("/confirm/:id", confirmUser)
 userRoute.get("/find/all", restrict, async (req, res) => {
@@ -39,5 +41,9 @@ userRoute.get("/find/all", restrict, async (req, res) => {
         res.status(500).json({ message: "An error occurred" })
     }
 })
+
+userRoute.get('/me', auth, userController.getUserInformation )
+userRoute.get('/gamedata', auth, userController.getUserGameData )
+userRoute.get('/all', auth, userController.getAllUser ) 
 
 module.exports = userRoute

@@ -4,9 +4,8 @@ const gameLevelSchema = mongoose.Schema({
 		type: mongoose.Schema.Types.Object,
 		ref: "User"
 	},
-
-	game_id:{
-		type: Number
+	game:{
+		type: String
 	},
 
 	level: {

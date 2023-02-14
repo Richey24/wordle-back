@@ -6,6 +6,7 @@ const auth = require("../utils/auth");
 const router = express.Router();
 
 router.post("/crossword", auth, activityController.createActivity);
+router.get('/crossword', auth, activityController.getActivity);
 
 module.exports = router;
 
