@@ -14,7 +14,8 @@ const changePassword = async (req, res) => {
     if (!verify) {
         return res.status(401).json({ message: "Incorrect password" })
     }
-    await User.findByIdAndUpdate(body.id, { password: body.newPass })
+    const hashPass = await argon2.hash(body.newPass)
+    await User.findByIdAndUpdate(body.id, { password: hashPass })
     res.status(200).json({ message: "password changed successfully" })
 }
 
