@@ -26,8 +26,10 @@ const register = async (req, res) => {
         await confirmMail(user.email, user._id, user.firstName)
         res.status(200).json(mainUser)
     } catch (error) {
-        res.status(500).json({ message: "An error occurred" })
+        res.status(500).json({ message: error })
     }
 }
 
 module.exports = register
+
+

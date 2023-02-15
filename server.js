@@ -11,6 +11,10 @@ const wordRoutes = require("./routes/wordRoute");
 const subRoutes = require("./routes/subRoute");
 const { Cart, User } = require("./schema");
 const failedSubMail = require("./mail/failedSubMail");
+const activityRoutes = require('./routes/activityRoutes');
+const leaderRoutes = require('./routes/leaderboardRoutes');
+
+const Seeder = require('./seeders/wordsSeeder');
 require("dotenv").config({ path: ".env" })
 const app = express()
 const stripe = require("stripe")(process.env.STRIPE_KEY)
@@ -39,6 +43,8 @@ try {
     console.log(error);
 }
 
+// Seeder.seedWords();
+
 app.get("/", (req, res) => res.send("Hello world"))
 app.use("/user", userRoute)
 app.use("/sword", swordRoutes)
@@ -48,7 +54,12 @@ app.use("/score", scoreRoutes)
 app.use("/word", wordRoutes)
 app.use("/sub", subRoutes)
 
-const YOUR_DOMAIN = "https://www.israelbiblecamp.world/subscription"
+app.use("/api/user", userRoute)
+app.use("/api/activities", activityRoutes)
+app.use("/api/leaderboard", leaderRoutes )
+app.use('/api/highscores', activityRoutes)
+
+const YOUR_DOMAIN = "http://localhost:3000/subscription"
 
 app.post('/create-checkout-session', async (req, res) => {
     const { email, plan, id } = req.query
@@ -64,7 +75,7 @@ app.post('/create-checkout-session', async (req, res) => {
         success_url: `${YOUR_DOMAIN}?success=true`,
         cancel_url: `${YOUR_DOMAIN}?canceled=true`,
     });
-    // await Cart.create({ sessionID: session.id, email: email, plan: plan, userID: id })
+    await Cart.create({ sessionID: session.id, email: email, plan: plan, userID: id })
 
     res.redirect(303, session.url);
 });
@@ -85,37 +96,33 @@ app.post("/webhook", express.raw({ type: 'application/json' }), async (req, res)
         case "checkout.session.completed": {
             const session = event.data.object;
             console.log(session);
-            // if (session.payment_status === 'paid') {
-            //     const customer = await Cart.findOne({ sessionID: session.id })
-            //     const expiryDate = customer.plan === "monthly" ? new Date(new Date().setMonth(new Date().getMonth() + 1)) : new Date(new Date().setMonth(new Date().getMonth() + 12))
-            //     await User.findOneAndUpdate({ email: customer.email }, { paid: true, expiryDate: expiryDate, customerID: session.customer, subscriptionID: session.subscription, plan: customer.plan })
-            // }
+            if (session.payment_status === 'paid') {
+                const customer = await Cart.findOne({ sessionID: session.id })
+                const expiryDate = customer.plan === "monthly" ? new Date(new Date().setMonth(new Date().getMonth() + 1)) : new Date(new Date().setMonth(new Date().getMonth() + 12))
+                await User.findOneAndUpdate({ email: customer.email }, { paid: true, expiryDate: expiryDate, customerID: session.customer, subscriptionID: session.subscription, plan: customer.plan })
+            }
             break;
         }
         case "checkout.session.async_payment_succeeded": {
             const session = event.data.object;
-            console.log(session);
-            // const customer = await Cart.findOne({ sessionID: session.id })
-            // const expiryDate = customer.plan === "monthly" ? new Date(new Date().setMonth(new Date().getMonth() + 1)) : new Date(new Date().setMonth(new Date().getMonth() + 12))
-            // await User.findOneAndUpdate({ email: customer.email }, { paid: true, expiryDate: expiryDate, customerID: session.customer, subscriptionID: session.subscription, plan: customer.plan })
+            const customer = await Cart.findOne({ sessionID: session.id })
+            const expiryDate = customer.plan === "monthly" ? new Date(new Date().setMonth(new Date().getMonth() + 1)) : new Date(new Date().setMonth(new Date().getMonth() + 12))
+            await User.findOneAndUpdate({ email: customer.email }, { paid: true, expiryDate: expiryDate, customerID: session.customer, subscriptionID: session.subscription, plan: customer.plan })
         }
         case "checkout.session.async_payment_failed": {
             const session = event.data.object;
-            console.log(session);
             const customer = await Cart.findOne({ sessionID: session.id })
             failedSubMail(customer.email)
             break
         }
         case "invoice.payment_succeeded": {
             const invoice = event.data.object;
-            console.log(invoice);
             const user = await User.find({ customerID: invoice.customer })
             const expiryDate = user.plan === "monthly" ? new Date(new Date().setMonth(new Date().getMonth() + 1)) : new Date(new Date().setMonth(new Date().getMonth() + 12))
             await User.findOneAndUpdate({ customerID: invoice.customer }, { expiryDate: expiryDate })
         }
         case "invoice.payment_failed": {
             const invoice = event.data.object;
-            console.log(invoice);
             const user = await User.find({ customerID: invoice.customer })
             failedSubMail(user.email)
         }
