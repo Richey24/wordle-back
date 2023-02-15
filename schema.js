@@ -44,6 +44,14 @@ const userSchema = new mongoose.Schema({
     superAdmin: {
         type: Boolean
     },
+    emailNotification: {
+        type: Boolean,
+        default: false
+    },
+    newsletter: {
+        type: Boolean,
+        default: false
+    },
     expiryDate: {
         type: Date
     },
