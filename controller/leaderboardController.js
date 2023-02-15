@@ -19,10 +19,10 @@ exports.getWeeklyLeaderboards = async (req, res) => {
 	const lastDay = new Date(today.setDate(today.getDate() - today.getDay() + 6));
 
 	if (req.body.offset) {
-		const highScore = await UserScore.find({ created_at: {"$gte": firstDay.toISOString().split('T')[0], "$lt": lastDay.toISOString().split('T')[0]} }).sort({ score: -1 }) 
+		const highScore = await UserScore.find({ created_at: {"$gte": firstDay.toISOString().split('T')[0], "$lt": lastDay.toISOString().split('T')[0]} }).sort({ score: -1 }).populate("user");
 	}
 	
-	const highScore = await UserScore.find({ created_at: {"$gte": firstDay.toISOString().split('T')[0], "$lt": lastDay.toISOString().split('T')[0]} }).sort({ score: -1 })
+	const highScore = await UserScore.find({ created_at: {"$gte": firstDay.toISOString().split('T')[0], "$lt": lastDay.toISOString().split('T')[0]} }).sort({ score: -1 }).populate("user");
 	res.status(201).json({ leadboard: highScore})
 }
 

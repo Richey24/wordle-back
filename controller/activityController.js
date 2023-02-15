@@ -11,7 +11,7 @@ exports.createActivity = async (req, res) => {
 
 	let response = false;
 
-   let score = await this.calculateScore(req.body.levels, req.body.time, req.body.score);
+   let score = await this.calculateCrosswordScore(req.body.levels, req.body.time, req.body.score);
    let user = req.userData
 
    console.log(user)
@@ -63,7 +63,7 @@ exports.getUserLevel  = async ( req,res ) => {}
  * @param  {[type]} score         [description]
  * @return {[type]}               [description]
  */
-exports.calculateScore = async function(levels, timeCompleted, score) {
+exports.calculateCrosswordScore = async function(levels, timeCompleted, score) {
 
 	let result = 0;
 
@@ -81,6 +81,10 @@ exports.calculateScore = async function(levels, timeCompleted, score) {
 
 	console.log(result)
 	return result;
+}
+
+exports.calculateWordleScore = async function (level, timeCompleted, score) {
+
 }
 
 /**
