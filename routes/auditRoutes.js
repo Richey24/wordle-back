@@ -3,6 +3,7 @@ const addAudit = require("../auditController/addAudit")
 const getAudit = require("../auditController/getAudit")
 const jwt = require("jsonwebtoken")
 const { promisify } = require("util")
+const deleteAudit = require("../auditController/deleteAudit")
 
 const auditRoutes = express.Router()
 
@@ -18,5 +19,6 @@ const restrict = async (req, res, next) => {
 
 auditRoutes.get("/get/all", restrict, getAudit)
 auditRoutes.post("/add", restrict, addAudit)
+auditRoutes.delete("/delete", restrict, deleteAudit)
 
 module.exports = auditRoutes
