@@ -83,6 +83,13 @@ exports.calculateCrosswordScore = async function(levels, timeCompleted, score) {
 	return result;
 }
 
+/**
+ * [description]
+ * @param  {[type]} level         [description]
+ * @param  {[type]} timeCompleted [description]
+ * @param  {[type]} score         [description]
+ * @return {[type]}               [description]
+ */
 exports.calculateWordleScore = async function (level, timeCompleted, score) {
 
 }
