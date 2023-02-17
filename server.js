@@ -59,7 +59,7 @@ app.use("/api/activities", activityRoutes)
 app.use("/api/leaderboard", leaderRoutes)
 app.use('/api/highscores', activityRoutes)
 
-const YOUR_DOMAIN = "http://localhost:3000/subscription"
+const YOUR_DOMAIN = "https://israelbiblecamp.world/subscription"
 
 app.post('/create-checkout-session', async (req, res) => {
     const { email, plan, id } = req.query

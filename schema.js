@@ -99,6 +99,9 @@ const userSchema = new mongoose.Schema({
     },
     playedBible: {
         type: Boolean
+    },
+    playedCross: {
+        type: Boolean
     }
 })
 
@@ -157,7 +160,7 @@ const quizSchema = new mongoose.Schema({
 })
 
 const quizScoreSchema = new mongoose.Schema({
-   
+
     playerName: {
         type: String
     },
@@ -165,7 +168,7 @@ const quizScoreSchema = new mongoose.Schema({
     tribe: {
         type: String
     },
-    
+
     score: {
         type: String
     },
