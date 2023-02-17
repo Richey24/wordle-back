@@ -56,7 +56,7 @@ app.use("/sub", subRoutes)
 
 app.use("/api/user", userRoute)
 app.use("/api/activities", activityRoutes)
-app.use("/api/leaderboard", leaderRoutes )
+app.use("/api/leaderboard", leaderRoutes)
 app.use('/api/highscores', activityRoutes)
 
 const YOUR_DOMAIN = "http://localhost:3000/subscription"
@@ -95,7 +95,6 @@ app.post("/webhook", express.raw({ type: 'application/json' }), async (req, res)
     switch (event.type) {
         case "checkout.session.completed": {
             const session = event.data.object;
-            console.log(session);
             if (session.payment_status === 'paid') {
                 const customer = await Cart.findOne({ sessionID: session.id })
                 const expiryDate = customer.plan === "monthly" ? new Date(new Date().setMonth(new Date().getMonth() + 1)) : new Date(new Date().setMonth(new Date().getMonth() + 12))
@@ -112,19 +111,19 @@ app.post("/webhook", express.raw({ type: 'application/json' }), async (req, res)
         case "checkout.session.async_payment_failed": {
             const session = event.data.object;
             const customer = await Cart.findOne({ sessionID: session.id })
-            failedSubMail(customer.email)
+            // failedSubMail(customer.email)
             break
         }
         case "invoice.payment_succeeded": {
             const invoice = event.data.object;
-            const user = await User.find({ customerID: invoice.customer })
+            const user = await User.findOne({ customerID: invoice.customer })
             const expiryDate = user.plan === "monthly" ? new Date(new Date().setMonth(new Date().getMonth() + 1)) : new Date(new Date().setMonth(new Date().getMonth() + 12))
             await User.findOneAndUpdate({ customerID: invoice.customer }, { expiryDate: expiryDate })
         }
         case "invoice.payment_failed": {
             const invoice = event.data.object;
-            const user = await User.find({ customerID: invoice.customer })
-            failedSubMail(user.email)
+            const user = await User.findOne({ customerID: invoice.customer })
+            // failedSubMail(user.email)
         }
         default:
             break;
