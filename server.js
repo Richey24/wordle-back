@@ -80,6 +80,20 @@ app.post('/create-checkout-session', async (req, res) => {
     res.redirect(303, session.url);
 });
 
+app.post("/cancel/sub/:id", async (req, res) => {
+    try {
+        const id = req.params.id
+        if (!id) {
+            return res.status(400).json({ message: "id is required" })
+        }
+        const user = await User.findById(id)
+        await stripe.subscription.update(user.subscriptionID, { cancel_at_period_end: true })
+        return res.status(200).json({ message: "subscription cancelled successfully" })
+    } catch (error) {
+        res.status(500).json({ message: "An error occurred" })
+    }
+})
+
 app.post("/webhook", express.raw({ type: 'application/json' }), async (req, res) => {
     const payload = req.body;
     const sig = req.headers['stripe-signature'];
@@ -124,6 +138,10 @@ app.post("/webhook", express.raw({ type: 'application/json' }), async (req, res)
             const invoice = event.data.object;
             const user = await User.findOne({ customerID: invoice.customer })
             // failedSubMail(user.email)
+        }
+        case "customer.subscription.deleted": {
+            const session = event.data.object;
+            await User.findOneAndUpdate({ customerID: session.customer }, { paid: false })
         }
         default:
             break;
