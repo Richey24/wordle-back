@@ -12,6 +12,7 @@ const { promisify } = require("util")
 const confirmUser = require("../controller/confirm")
 const userController = require('../controller/userController')
 const auth = require("../utils/auth");
+const cancelSub = require("../controller/cancelSub")
 const userRoute = express.Router()
 
 const restrict = async (req, res, next) => {
@@ -30,6 +31,7 @@ userRoute.get("/get/:id", restrict, getOne)
 userRoute.post("/reset/send", getWithEmail)
 userRoute.post("/reset/password/:id", resetPassword)
 userRoute.put("/update/:id", restrict, updateUser)
+userRoute.post("cancel/sub/mail", cancelSub)
 
 userRoute.delete("/delete/:id", restrict, deleteUser)
 userRoute.post("/confirm/:id", confirmUser)
@@ -42,8 +44,8 @@ userRoute.get("/find/all", restrict, async (req, res) => {
     }
 })
 
-userRoute.get('/me', auth, userController.getUserInformation )
-userRoute.get('/gamedata', auth, userController.getUserGameData )
-userRoute.get('/all', auth, userController.getAllUser ) 
+userRoute.get('/me', auth, userController.getUserInformation)
+userRoute.get('/gamedata', auth, userController.getUserGameData)
+userRoute.get('/all', auth, userController.getAllUser)
 
 module.exports = userRoute
