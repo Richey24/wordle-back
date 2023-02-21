@@ -1,7 +1,7 @@
-const transporter = require("../utils/transporter")
+const theMailer = require("../utils/transporter")
 
 const sendMail = async (email, id, name) => {
-    await transporter.sendMail({
+    await theMailer.sendMail({
         from: '"Israel Bible Camp" <info@israelbiblecamp.com>',
         to: `${email}, ${email}`,
         subject: "Reset Your Password",
