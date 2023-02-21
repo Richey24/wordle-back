@@ -1,7 +1,7 @@
 const nodemailer = require("nodemailer");
 require("dotenv").config({ path: "../.env" })
 
-const transporter = nodemailer.createTransport({
+const theMailer = nodemailer.createTransport({
     service: "Outlook365",
     auth: {
         user: process.env.EMAIL,
@@ -9,4 +9,4 @@ const transporter = nodemailer.createTransport({
     },
 });
 
-module.exports = transporter
+module.exports = theMailer

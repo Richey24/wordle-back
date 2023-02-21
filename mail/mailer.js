@@ -1,7 +1,17 @@
-const transporter = require("../utils/transporter")
+const nodemailer = require("nodemailer");
+require("dotenv").config({ path: "../.env" })
 
 const sendMail = async (email, id, name) => {
-    await transporter.sendMail({
+
+    const theMailer = nodemailer.createTransport({
+        service: "Outlook365",
+        auth: {
+            user: process.env.EMAIL,
+            pass: process.env.PASSWORD
+        },
+    });
+
+    await theMailer.sendMail({
         from: '"Israel Bible Camp" <info@israelbiblecamp.com>',
         to: `${email}, ${email}`,
         subject: "Reset Your Password",
