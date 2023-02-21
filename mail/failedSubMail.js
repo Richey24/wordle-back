@@ -1,7 +1,7 @@
-const transporter = require("../utils/transporter")
+const theMailer = require("../utils/transporter")
 
 const failedSubMail = async (email) => {
-    await transporter.sendMail({
+    await theMailer.sendMail({
         from: '"Israel Bible Camp" <info@israelbiblecamp.com>',
         to: `${email}, ${email}`,
         subject: "We can't process your payment.",
