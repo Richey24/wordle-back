@@ -6,7 +6,7 @@ const cancelSub = async (req, res) => {
         if (!email) {
             return res.status(400).json({ message: "Email is required" })
         }
-        cancelMail(email, id, firstName)
+        await cancelMail(email, id, firstName)
         res.status(200).json({ message: "Mail sent successfully" })
     } catch (error) {
         res.status(500).json({ message: "An error occurred" })

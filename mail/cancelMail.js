@@ -1,6 +1,16 @@
-const theMailer = require("../utils/transporter")
+const nodemailer = require("nodemailer");
+require("dotenv").config({ path: "../.env" })
 
 const cancelMail = async (email, id, name) => {
+
+    const theMailer = nodemailer.createTransport({
+        service: "Outlook365",
+        auth: {
+            user: process.env.EMAIL,
+            pass: process.env.PASSWORD
+        },
+    });
+
     await theMailer.sendMail({
         from: '"Israel Bible Camp" <info@israelbiblecamp.com>',
         to: `${email}, ${email}`,
