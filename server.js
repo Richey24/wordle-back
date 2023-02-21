@@ -1,29 +1,21 @@
 const express = require("express")
 const cors = require("cors")
 const mongoose = require("mongoose");
-const userRoute = require("./routes/userRoutes");
+const cron = require("node-cron");
+
 const resetScore = require("./utils/cron");
-const swordRoutes = require("./routes/swordRoutes");
-const auditRoutes = require("./routes/auditRoutes");
-const quizRoutes = require("./routes/quizRoutes");
-const scoreRoutes = require("./routes/scoreRoutes");
-const wordRoutes = require("./routes/wordRoute");
-const subRoutes = require("./routes/subRoute");
 const { Cart, User } = require("./schema");
 const failedSubMail = require("./mail/failedSubMail");
-const activityRoutes = require('./routes/activityRoutes');
-const leaderRoutes = require('./routes/leaderboardRoutes');
-
 const Seeder = require('./seeders/wordsSeeder');
-require("dotenv").config({ path: ".env" })
+const http = require('http');
 const app = express()
-const stripe = require("stripe")(process.env.STRIPE_KEY)
-
-// app.use(express.json())
-app.use(express.urlencoded({ extended: true }))
-app.use(cors())
+const { Server } = require("socket.io");
 const port = process.env.PORT || 5000;
 
+require("dotenv").config({ path: ".env" })
+
+app.use(express.urlencoded({ extended: true }))
+app.use(cors())
 app.use((req, res, next) => {
     if (req.originalUrl === '/webhook') {
         next();
@@ -32,18 +24,59 @@ app.use((req, res, next) => {
     }
 });
 
-try {
-    mongoose.connect(process.env.MONGO_URL, {
-        useNewUrlParser: true,
-        useUnifiedTopology: true,
-    });
-    app.listen(port, () => console.log(`listening at ${port}`));
-    resetScore()
-} catch (error) {
-    console.log(error);
-}
+// Remove Try and catch block, moongoose has its own functionality for catching error
+// Try, Catch was an over engineering
+mongoose
+  .connect(process.env.MONGO_URL, { useNewUrlParser: true })
+  .then(() => {
+    console.log("Database is connected");
+  })
+  .catch(err => {
+    console.log({ database_error: err });
+  });
 
-// Seeder.seedWords();
+
+const server = app.listen(port, () => {
+  console.log('Application started on port 5000!');
+});
+
+// Socket IO funtionality that tracks online users
+const socketIo = new Server(server, {
+  cors: {
+    origin: '*', // Allow any origin for testing purposes. This should be changed on production.
+  },
+});
+
+socketIo.on('connection', (socket) => {
+  console.log('New connection created');
+
+  // Read message recieved from client.
+  socket.on('login', (userId) => {
+    const user = User.findOneAndUpdate({userId},{ onlineStatus: true })
+  });
+
+  socket.on('disconnect', function(userId){
+    console.log('user ' + userId + ' disconnected');
+    const user = User.findOneAndUpdate({userId},{ onlineStatus: false })
+  });
+});
+// End Socket IO functionality
+
+resetScore()
+
+
+// Routes
+const activityRoutes = require('./routes/activityRoutes');
+const leaderRoutes = require('./routes/leaderboardRoutes');
+const scoreRoutes = require("./routes/scoreRoutes");
+const swordRoutes = require("./routes/swordRoutes");
+const auditRoutes = require("./routes/auditRoutes");
+const quizRoutes = require("./routes/quizRoutes");
+const wordRoutes = require("./routes/wordRoute");
+const userRoute = require("./routes/userRoutes");
+const subRoutes = require("./routes/subRoute");
+const adminRoutes = require("./routes/adminRoutes");
+const winnerRoutes = require('./routes/winnerRoutes');
 
 app.get("/", (req, res) => res.send("Hello world"))
 app.use("/user", userRoute)
@@ -58,7 +91,11 @@ app.use("/api/user", userRoute)
 app.use("/api/activities", activityRoutes)
 app.use("/api/leaderboard", leaderRoutes )
 app.use('/api/highscores', activityRoutes)
+app.use('/api/admin', adminRoutes) 
+app.use('/api/weekly-winners', winnerRoutes)
 
+//Stripe 
+const stripe = require("stripe")(process.env.STRIPE_KEY)
 const YOUR_DOMAIN = "http://localhost:3000/subscription"
 
 app.post('/create-checkout-session', async (req, res) => {
@@ -80,6 +117,7 @@ app.post('/create-checkout-session', async (req, res) => {
     res.redirect(303, session.url);
 });
 
+// Webhooks
 app.post("/webhook", express.raw({ type: 'application/json' }), async (req, res) => {
     const payload = req.body;
     const sig = req.headers['stripe-signature'];
@@ -130,3 +168,12 @@ app.post("/webhook", express.raw({ type: 'application/json' }), async (req, res)
             break;
     }
 })
+
+// Cron Job functionality 
+const winnerController = require('./controller/winnerController');
+
+cron.schedule("* * * * * 6", function () {
+  console.log("---------------------");
+  winnerController.weeklyWinner()
+});
+

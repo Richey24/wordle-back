@@ -1,10 +1,10 @@
 const express = require("express")
 const { Word } = require("../schema")
 const wordController = require("../controller/wordController")
-
+const auth = require("../utils/auth");
 const wordRoutes = express.Router()
 
-wordRoutes.get("/get/all", wordController.getAllWords )
+wordRoutes.get("/get/all", auth, wordController.getAllWords )
 
 wordRoutes.get("/get/:id", async (req, res) => {
     const { id } = req.params
@@ -17,3 +17,5 @@ wordRoutes.get("/get/:id", async (req, res) => {
 
 
 module.exports = wordRoutes
+
+

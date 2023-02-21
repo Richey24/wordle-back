@@ -99,6 +99,10 @@ const userSchema = new mongoose.Schema({
     },
     playedBible: {
         type: Boolean
+    },  
+    onlineStatus: {
+        type: Boolean,
+        default: false
     }
 })
 

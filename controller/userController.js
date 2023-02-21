@@ -18,9 +18,19 @@ exports.getUserInformation = async (req, res) => {
 exports.getUserGameData = async (req, res) => {
 	 
 	 const user = req.userData;
-	 const game = await UserScore.findOne({user_id: user.id})
+
+	 const today = new Date();
+
+      // ✅ Get the first day of the current week (Sunday)
+	 const firstDay = new Date(today.setDate(today.getDate() - today.getDay()));
+
+      // ✅ Get the last day of the current week (Saturday)
+	 const lastDay = new Date(today.setDate(today.getDate() - today.getDay() + 6));
+
+      //check if game level exist
+	 const highScore = await UserScore.findOne({ user: user.id, created_at: {"$gte": firstDay.toISOString().split('T')[0], "$lt": lastDay.toISOString().split('T')[0]} }) 
 	 
-	 return await res.json(game);
+	 return await res.json(highScore);
 }
 
 exports.getAllUser = async (req, res) => {
