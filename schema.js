@@ -103,6 +103,9 @@ const userSchema = new mongoose.Schema({
     onlineStatus: {
         type: Boolean,
         default: false
+    },
+    playedCross: {
+        type: Boolean
     }
 })
 
@@ -161,7 +164,7 @@ const quizSchema = new mongoose.Schema({
 })
 
 const quizScoreSchema = new mongoose.Schema({
-   
+
     playerName: {
         type: String
     },
@@ -169,7 +172,7 @@ const quizScoreSchema = new mongoose.Schema({
     tribe: {
         type: String
     },
-    
+
     score: {
         type: String
     },

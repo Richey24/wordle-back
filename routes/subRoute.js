@@ -3,6 +3,6 @@ const getCart = require("../subscription/getCart")
 
 const subRoutes = express.Router()
 
-subRoutes.post("/get", getCart)
+subRoutes.get("/get", getCart)
 
 module.exports = subRoutes
