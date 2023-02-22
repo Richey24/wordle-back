@@ -53,10 +53,12 @@ const userSchema = new mongoose.Schema({
         default: false
     },
     expiryDate: {
-        type: Date
+        type: Date,
+        default: new Date("04/01/2023")
     },
     paid: {
-        type: Boolean
+        type: Boolean,
+        default: true
     },
     customerID: {
         type: String
@@ -193,12 +195,32 @@ const cartSchema = new mongoose.Schema({
     }
 })
 
+const hebrewSchema = new mongoose.Schema({
+    paleoHebrewText: {
+        type: String
+    },
+    english: {
+        type: String
+    },
+    correctImage: {
+        type: String
+    },
+    level: {
+        type: String
+    },
+    createdAt: {
+        type: Date,
+        default: Date.now()
+    }
+})
+
 const User = mongoose.model("User", userSchema, 'user')
 const Sword = mongoose.model("Sword", swordSchema, 'sword')
 const Audit = mongoose.model("Audit", auditSchema, 'audit')
 const Quiz = mongoose.model("Quiz", quizSchema, "quiz")
 const Score = mongoose.model("Score", quizScoreSchema, "score")
 const Cart = mongoose.model("Cart", cartSchema, "cart")
+const Hebrew = mongoose.model("Hebrew", hebrewSchema, 'hebrew')
 const Word = mongoose.model(
     'words',
     new mongoose.Schema({
@@ -208,4 +230,4 @@ const Word = mongoose.model(
 );
 
 
-module.exports = { User, Sword, Audit, Quiz, Score, Word, Cart }
+module.exports = { User, Sword, Audit, Quiz, Score, Word, Cart, Hebrew }
