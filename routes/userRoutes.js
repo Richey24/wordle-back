@@ -31,7 +31,7 @@ userRoute.get("/get/:id", restrict, getOne)
 userRoute.post("/reset/send", getWithEmail)
 userRoute.post("/reset/password/:id", resetPassword)
 userRoute.put("/update/:id", restrict, updateUser)
-userRoute.post("cancel/sub/mail", cancelSub)
+userRoute.post("/cancel/sub/mail", cancelSub)
 
 userRoute.delete("/delete/:id", restrict, deleteUser)
 userRoute.post("/confirm/:id", confirmUser)

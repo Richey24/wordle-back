@@ -141,7 +141,7 @@ app.post("/cancel/sub/:id", async (req, res) => {
             return res.status(400).json({ message: "id is required" })
         }
         const user = await User.findById(id)
-        await stripe.subscription.update(user.subscriptionID, { cancel_at_period_end: true })
+        await stripe.subscriptions.update(user.subscriptionID, { cancel_at_period_end: true })
         return res.status(200).json({ message: "subscription cancelled successfully" })
     } catch (error) {
         res.status(500).json({ message: "An error occurred" })

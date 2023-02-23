@@ -1,7 +1,17 @@
-const transporter = require("../utils/transporter")
+const nodemailer = require("nodemailer");
+require("dotenv").config({ path: "../.env" })
 
 const failedSubMail = async (email) => {
-    await transporter.sendMail({
+
+    const theMailer = nodemailer.createTransport({
+        service: "Outlook365",
+        auth: {
+            user: process.env.EMAIL,
+            pass: process.env.PASSWORD
+        },
+    });
+
+    await theMailer.sendMail({
         from: '"Israel Bible Camp" <info@israelbiblecamp.com>',
         to: `${email}, ${email}`,
         subject: "We can't process your payment.",
