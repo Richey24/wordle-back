@@ -47,5 +47,6 @@ userRoute.get("/find/all", restrict, async (req, res) => {
 userRoute.get('/me', auth, userController.getUserInformation)
 userRoute.get('/gamedata', auth, userController.getUserGameData)
 userRoute.get('/all', auth, userController.getAllUser)
+userRoute.get('/limit', auth, userController.limitUserAccess )
 
 module.exports = userRoute

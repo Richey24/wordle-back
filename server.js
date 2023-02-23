@@ -47,17 +47,30 @@ const socketIo = new Server(server, {
   },
 });
 
+
+const users = {};
 socketIo.on('connection', (socket) => {
-  console.log('New connection created');
 
   // Read message recieved from client.
   socket.on('login', (userId) => {
-    const user = User.findOneAndUpdate({userId},{ onlineStatus: true })
+    console.log(userId)
+
+    const user = User.findByIdAndUpdate(userId, { onlineStatus: true })
+    const response = user.updateOne()
+
+    users[socket.id] = userId;
   });
 
-  socket.on('disconnect', function(userId){
-    console.log('user ' + userId + ' disconnected');
-    const user = User.findOneAndUpdate({userId},{ onlineStatus: false })
+
+  socket.on('disconnect', (userId) => {
+      console.log('disconnect user')
+      console.log('....'+users[socket.id])
+      // console.log('user ' + userId + ' disconnected');
+       const user = User.findByIdAndUpdate(users[socket.id], { onlineStatus: false })
+       const response = user.updateOne()
+
+       // remove saved socket from users object
+       delete users[socket.id];
   });
 });
 // End Socket IO functionality
@@ -77,6 +90,7 @@ const userRoute = require("./routes/userRoutes");
 const subRoutes = require("./routes/subRoute");
 const adminRoutes = require("./routes/adminRoutes");
 const winnerRoutes = require('./routes/winnerRoutes');
+const notificationRoutes = require('./routes/notificationRoutes')
 
 app.get("/", (req, res) => res.send("Hello world"))
 app.use("/user", userRoute)
@@ -93,6 +107,8 @@ app.use("/api/leaderboard", leaderRoutes)
 app.use('/api/highscores', activityRoutes)
 app.use('/api/admin', adminRoutes) 
 app.use('/api/weekly-winners', winnerRoutes)
+app.use('/api/gameplay-count', userRoute)
+app.use('/api/notifications', notificationRoutes ) 
 
 //Stripe 
 const stripe = require("stripe")(process.env.STRIPE_KEY)
