@@ -25,6 +25,7 @@ exports.getWeeklyWinners = async (req, res) => {
 exports.weeklyWinner = async () => {
 
 	console.log('RUNNING WEEKLY WINNSER')
+	
 	const today = new Date();
 	const parseDate = today.toISOString().split('T')[0];
 
