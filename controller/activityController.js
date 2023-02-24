@@ -14,7 +14,6 @@ exports.createActivity = async (req, res) => {
    let score = await this.calculateCrosswordScore(req.body.levels, req.body.time, req.body.score);
    let user = req.userData
 
-   console.log(user)
 
 	const activity = new Activity({
 		user_id: user.id,
@@ -47,7 +46,7 @@ exports.createActivity = async (req, res) => {
  */
 exports.getActivity = async (req, res) => {
 
-	const activities = await Activity.find({}).populate("user_id");
+	const activities = await Activity.find({}).populate("user_id").sort({date: -1});
 
 	console.log(activities)
 	res.status(201).json({activities});
