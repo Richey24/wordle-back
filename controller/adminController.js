@@ -6,7 +6,7 @@ exports.dashboard = async ( req, res) => {
 	let response = []
 	let countries  = []
 
-	const onlineUser = await User.find({ onlineStauts: true })
+	const onlineUser = await User.find({ onlineStatus: true })
 	const totalUser = await User.find({})
 
 	totalUser.forEach((values, keys) => {

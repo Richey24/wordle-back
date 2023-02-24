@@ -53,26 +53,27 @@ exports.limitUserAccess = async(req, res) => {
 	const game = 'Crossword Puzzle';
 	const userId = req.userData.id;
 
+	console.log(userId)
+	console.log('Working')
 	const user = await User.findById(userId);
 
 	if (!user) {
 	   return;
 	}
+	
+	if (user.paid === false && Date.now() > new Date(user.expiryDate).getTime()) {
 
-	if (user.paid === false) {
+		const todayStart = new Date(new Date().setHours(0, 0, 0, 0)).toISOString().split('T')[0]
+          const todayEnd   = new Date(new Date().setHours(23, 59, 59, 999)).toISOString().split('T')[0]
 
-		var min_date = new Date();
-          var max_date = new Date();
-
-		min_date.setHours(0,0,0,0);
-		max_date.setHours(23,59,59,999);
-
-	     const activity = await Activity.findOne({user_id: userId, date: { "$gte": min_date, "$lt": max_date}})
+		console.log('max date: '+todayStart)
+	     const activity = await Activity.findOne({user_id: userId, date: { "$gte": todayStart, "$lt": todayEnd }})
+	     
 	     console.log(activity )
 	     if (activity)  {
 	     	
 	     	let response = {
-	     		paid: false,
+	     		paid: user.paid,
 	     		gamePlay: true
 
 	     	}
@@ -82,7 +83,7 @@ exports.limitUserAccess = async(req, res) => {
 	     } else {
 
 	     	let response = {
-	     		paid: false,
+	     		paid: user.paid,
 	     		gamePlay: false
 	     	}
 
@@ -92,7 +93,7 @@ exports.limitUserAccess = async(req, res) => {
 	}
 
 	let response = {
-		paid: true,
+		paid: user.paid,
 		gamePlay: true
 	}
 

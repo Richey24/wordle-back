@@ -55,18 +55,24 @@ socketIo.on('connection', (socket) => {
   socket.on('login', (userId) => {
     console.log(userId)
 
-    const user = User.findByIdAndUpdate(userId, { onlineStatus: true })
+    const user = User.findByIdAndUpdate(userId, { onlineStatus: true },(err, data) => {
+        console.log(err)
+        console.log(data)
+    })
+    
     const response = user.updateOne()
-
     users[socket.id] = userId;
   });
 
 
   socket.on('disconnect', (userId) => {
       console.log('disconnect user')
-      console.log('....'+users[socket.id])
+      console.log('disconneted user: '+users[socket.id])
       // console.log('user ' + userId + ' disconnected');
-       const user = User.findByIdAndUpdate(users[socket.id], { onlineStatus: false })
+       const user = User.findByIdAndUpdate(users[socket.id], { onlineStatus: false }, (err, data) => {
+        console.log(err)
+        console.log(data)
+       } )
        const response = user.updateOne()
 
        // remove saved socket from users object
