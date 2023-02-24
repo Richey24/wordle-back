@@ -26,8 +26,8 @@ exports.createNotification = async (userID, message) => {
  */
 exports.getUserNotification = async(req, res) => {
 
-	const user = req.userData();
-	const notifications = Notification.find({ user: user._id, is_read: false })
+	const user = req.userData
+	const notifications = await Notification.find({ reciever: user.id, is_read: false })
 
 	res.status(201).json(notifications);
 }
@@ -38,16 +38,19 @@ exports.getUserNotification = async(req, res) => {
  * @param  {[type]} res [description]
  * @return {[type]}     [description]
  */
-exports.readNotification = async(req, res) => {
+exports.readNotification = async (req, res) => {
 
-	const user = req.userData();
-	const notification = Notification.findOneAndUpdate(notificationID, {
+	 const notificationID = req.body.notofication_id
+	 const notification = Notification.findByIdAndUpdate(notificationID, {
 		is_read: true
-	});
+	 }, (err, data) => {
+	 	console.log(err)
+		console.log(data)
+	 }).updateOne();
 
-	let update = notification.updateOne();
+	// let update = await notification.updateOne();
 
-	res.status(201).json(update);
+	res.status(201).json({ status: "Read Message Successfully"});
 }
 
 

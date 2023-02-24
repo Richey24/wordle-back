@@ -60,11 +60,11 @@ exports.limitUserAccess = async(req, res) => {
 	if (!user) {
 	   return;
 	}
-
-	if (user.paid === false) {
+	
+	if (user.paid === false && Date.now() > new Date(user.expiryDate).getTime()) {
 
 		const todayStart = new Date(new Date().setHours(0, 0, 0, 0)).toISOString().split('T')[0]
-          const todayEnd = new Date(new Date().setHours(23, 59, 59, 999)).toISOString().split('T')[0]
+          const todayEnd   = new Date(new Date().setHours(23, 59, 59, 999)).toISOString().split('T')[0]
 
 		console.log('max date: '+todayStart)
 	     const activity = await Activity.findOne({user_id: userId, date: { "$gte": todayStart, "$lt": todayEnd }})
@@ -73,7 +73,7 @@ exports.limitUserAccess = async(req, res) => {
 	     if (activity)  {
 	     	
 	     	let response = {
-	     		paid: false,
+	     		paid: user.paid,
 	     		gamePlay: true
 
 	     	}
@@ -83,7 +83,7 @@ exports.limitUserAccess = async(req, res) => {
 	     } else {
 
 	     	let response = {
-	     		paid: false,
+	     		paid: user.paid,
 	     		gamePlay: false
 	     	}
 
@@ -93,7 +93,7 @@ exports.limitUserAccess = async(req, res) => {
 	}
 
 	let response = {
-		paid: true,
+		paid: user.paid,
 		gamePlay: true
 	}
 

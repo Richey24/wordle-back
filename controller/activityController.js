@@ -2,6 +2,8 @@ const Activity = require('../models/Activity');
 const Level = require('../models/GameLevel');
 const UserScore = require('../models/UserScore')
 const Notification = require('../models/Notification');
+const { User } = require('../schema');
+
 /**
  * This function create game activie for each games
  * @param  {[type]} req [description]
@@ -33,17 +35,33 @@ exports.createActivity = async (req, res) => {
 		response = await this.levelUserUp(user.id, req.body.game, score)
 	}
 
-	const message = "";
-   
-   const notify = new Notification({
-   	reciever:  user.id,
-   	sender: 1,
-   	content: message,
-   })
-
+	const message = req.body.game+" played, score is "+score;
+   const noti = await this.createNotification(user.id, message)
 
 	res.status(201).json({data: data, levels: response})     
 }
+
+/**
+ * this function generates new notrifications
+ * @param  {[type]} userID  [description]
+ * @param  {[type]} message [description]
+ * @return {[type]}         [description]
+ */
+exports.createNotification = async (userID, message) => {
+
+	const user = User.findOne({ admin: true })
+
+	const notify = new Notification({
+		created_at: new Date(),
+		reciever: userID,
+		content: message,
+		sender: user._id,
+	})
+
+	notify.save();
+}
+
+
 
 /**
  * This function all gaming acivities

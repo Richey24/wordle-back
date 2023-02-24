@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const activitySchema = mongoose.Schema({
+const notificationSchema = mongoose.Schema({
 
 	reciever: {
 		type: mongoose.Schema.Types.Object,
@@ -25,3 +25,5 @@ const activitySchema = mongoose.Schema({
 	}
 })
 
+const notification = mongoose.model('Notification',notificationSchema)
+module.exports = notification;
