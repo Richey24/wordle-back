@@ -9,7 +9,6 @@ const Notification = require('../models/Notification');
 exports.createNotification = async (userID, message) => {
 
 	const notify = new Notification({
-		user: userID,
 		created_at: new Date(),
 		reciever: userID,
 		content: message,

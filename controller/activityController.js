@@ -1,6 +1,7 @@
 const Activity = require('../models/Activity');
 const Level = require('../models/GameLevel');
 const UserScore = require('../models/UserScore')
+const Notification = require('../models/Notification');
 /**
  * This function create game activie for each games
  * @param  {[type]} req [description]
@@ -32,6 +33,13 @@ exports.createActivity = async (req, res) => {
 		response = await this.levelUserUp(user.id, req.body.game, score)
 	}
 
+	const message = "";
+   
+   const notify = new Notification({
+   	reciever:  user.id,
+   	sender: 1,
+   	content: message,
+   })
 
 
 	res.status(201).json({data: data, levels: response})     
