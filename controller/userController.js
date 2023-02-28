@@ -48,54 +48,36 @@ exports.getAllUser = async (req, res) => {
  * @param  {[type]} res [description]
  * @return {[type]}     [description]
  */
-exports.limitUserAccess = async(req, res) => {
+exports.limitUserAccess = async (req, res) => {
+
+	var response = false
 
 	const game = 'Crossword Puzzle';
 	const userId = req.userData.id;
 
-	console.log(userId)
-	console.log('Working')
 	const user = await User.findById(userId);
 
 	if (!user) {
 	   return;
 	}
 	
-	if (user.paid === false && Date.now() > new Date(user.expiryDate).getTime()) {
+	const todayStart = new Date(new Date().setHours(0, 0, 0, 0)).toISOString()
+	const todayEnd   = new Date(new Date().setHours(23, 59, 59, 999)).toISOString()
 
-		const todayStart = new Date(new Date().setHours(0, 0, 0, 0)).toISOString().split('T')[0]
-          const todayEnd   = new Date(new Date().setHours(23, 59, 59, 999)).toISOString().split('T')[0]
+	// get activities within the current day
+     const activities = await Activity.find({user_id: userId, date: { "$gte": todayStart, "$lt": todayEnd }})
 
-		console.log('max date: '+todayStart)
-	     const activity = await Activity.findOne({user_id: userId, date: { "$gte": todayStart, "$lt": todayEnd }})
-	     
-	     console.log(activity )
-	     if (activity)  {
-	     	
-	     	let response = {
-	     		paid: user.paid,
-	     		gamePlay: true
-
-	     	}
-
-	     	res.status(200).json(response)
-	     	return
-	     } else {
-
-	     	let response = {
-	     		paid: user.paid,
-	     		gamePlay: false
-	     	}
-
-	     	res.status(200).json(response)
-	     	return
-	     }
-	}
-
-	let response = {
-		paid: user.paid,
-		gamePlay: true
-	}
+     if (activities.length > 0) {
+     	response = {
+     		paid: user.paid,
+	     	gamePlay: true
+     	}
+     } else {
+     	response = {
+     		paid: user.paid,
+	     	gamePlay: false
+     	}
+     }
 
 	res.status(200).json(response)
 }
