@@ -25,7 +25,7 @@ exports.createActivity = async (req, res) => {
 		status: req.body.status,
 		game: req.body.game,
 		time: req.body.time,
-		date: new Date().toISOString().split('T')[0],
+		date: new Date().toISOString().split('T')[0]
 	});
 
 	let data = await activity.save();
