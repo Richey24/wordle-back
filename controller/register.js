@@ -5,7 +5,7 @@ const confirmMail = require("../mail/confirm")
 
 const register = async (req, res) => {
 
-     console.log(req.body)
+    console.log(req.body)
     try {
         const body = req.body
         if (!body.username || !body.password || !body.email) {
@@ -25,7 +25,7 @@ const register = async (req, res) => {
         const user = await User.create(body)
         const token = jwt.sign({ id: user._id }, "rich", { expiresIn: "10h" })
         const mainUser = await User.findByIdAndUpdate(user._id, { mainToken: token }, { new: true }).select("-password")
-        await confirmMail(user.email, user._id, user.firstName)
+        await confirmMail(user.email, token, user.firstName)
         res.status(200).json(mainUser)
     } catch (error) {
         res.status(500).json({ message: error })

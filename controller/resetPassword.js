@@ -3,7 +3,7 @@ const argon2 = require("argon2")
 
 const resetPassword = async (req, res) => {
     try {
-        const id = req.params.id
+        const id = req.userData.id
         const password = req.body.password
         if (!id || !password) {
             return res.status(400).json({ message: "User ID and new password is required" })
