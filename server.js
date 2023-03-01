@@ -15,6 +15,7 @@ const activityRoutes = require('./routes/activityRoutes');
 const leaderRoutes = require('./routes/leaderboardRoutes');
 
 const Seeder = require('./seeders/wordsSeeder');
+const hebrewRoutes = require("./routes/hebrewRoutes");
 require("dotenv").config({ path: ".env" })
 const app = express()
 const stripe = require("stripe")(process.env.STRIPE_KEY)
@@ -53,6 +54,7 @@ app.use("/quiz", quizRoutes)
 app.use("/score", scoreRoutes)
 app.use("/word", wordRoutes)
 app.use("/sub", subRoutes)
+app.use("/hebrew", hebrewRoutes)
 
 app.use("/api/user", userRoute)
 app.use("/api/activities", activityRoutes)
@@ -87,6 +89,7 @@ app.post("/cancel/sub/:id", async (req, res) => {
             return res.status(400).json({ message: "id is required" })
         }
         const user = await User.findById(id)
+        await User.findByIdAndUpdate(id, { subscriptionID: "" })
         await stripe.subscriptions.update(user.subscriptionID, { cancel_at_period_end: true })
         return res.status(200).json({ message: "subscription cancelled successfully" })
     } catch (error) {
@@ -141,7 +144,7 @@ app.post("/webhook", express.raw({ type: 'application/json' }), async (req, res)
         }
         case "customer.subscription.deleted": {
             const session = event.data.object;
-            await User.findOneAndUpdate({ customerID: session.customer }, { paid: false })
+            await User.findOneAndUpdate({ customerID: session.customer }, { paid: false, customerID: "" })
         }
         default:
             break;
