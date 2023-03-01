@@ -97,6 +97,7 @@ const subRoutes = require("./routes/subRoute");
 const adminRoutes = require("./routes/adminRoutes");
 const winnerRoutes = require('./routes/winnerRoutes');
 const notificationRoutes = require('./routes/notificationRoutes')
+const hebrewRoutes = require('./routes/hebrewRoutes')
 
 app.get("/", (req, res) => res.send("Hello world"))
 app.use("/user", userRoute)
