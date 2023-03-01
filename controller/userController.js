@@ -81,3 +81,39 @@ exports.limitUserAccess = async (req, res) => {
 
 	res.status(200).json(response)
 }
+
+/**
+ * This function register yser
+ * @param  {[type]} req [description]
+ * @param  {[type]} res [description]
+ * @return {[type]}     [description]
+ */
+exports.registerUser = async ( req, res) => {
+
+	   console.log(req.body);
+	   const body = req.body;
+
+	   if (!body.username || !body.password || !body.email) {
+	       return res.status(400).json({ message: "Send all required information" })
+	   }
+	   const check = await User.findOne({ email: body.email })
+	   if (check) {
+	       return res.status(419).json({ message: "This email is already registered" })
+	   }
+	   const unique = await User.findOne({ username: body.username })
+	   if (unique) {
+	       return res.status(203).json({ message: "Username already taken" })
+	   }
+
+	   const pass = await argon2.hash(body.password)
+        body.password = pass
+        body.createdAt = new Date()
+        const user = await User.create(body)
+        const token = jwt.sign({ id: user._id }, "rich", { expiresIn: "10h" })
+        const mainUser = await User.findByIdAndUpdate(user._id, { mainToken: token }, { new: true }).select("-password")
+        await confirmMail(user.email, user._id, user.firstName)
+        res.status(200).json(mainUser)
+}
+
+
+
