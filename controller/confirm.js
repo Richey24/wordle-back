@@ -2,7 +2,7 @@ const { User } = require("../schema")
 
 const confirmUser = async (req, res) => {
     try {
-        const id = req.params.id
+        const id = req.userData.id
         if (!id) {
             return res.status(400).json({ message: "User ID is required" })
         }

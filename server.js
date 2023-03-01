@@ -15,6 +15,7 @@ const port = process.env.PORT || 5000;
 require("dotenv").config({ path: ".env" })
 
 app.use(express.urlencoded({ extended: true }))
+const auth = require("./utils/auth");
 app.use(cors())
 app.use((req, res, next) => {
     if (req.originalUrl === '/webhook') {
@@ -142,15 +143,16 @@ app.post('/create-checkout-session', async (req, res) => {
 });
 
 
-app.post("/cancel/sub/:id", async (req, res) => {
+app.post("/cancel/sub", auth, async (req, res) => {
     try {
-        const id = req.params.id
+        const id = req.userData.id
+        console.log(id);
         if (!id) {
             return res.status(400).json({ message: "id is required" })
         }
         const user = await User.findById(id)
-        await User.findByIdAndUpdate(id, { subscriptionID: "" })
         await stripe.subscriptions.update(user.subscriptionID, { cancel_at_period_end: true })
+        await User.findByIdAndUpdate(id, { subscriptionID: "" })
         return res.status(200).json({ message: "subscription cancelled successfully" })
     } catch (error) {
         res.status(500).json({ message: "An error occurred" })

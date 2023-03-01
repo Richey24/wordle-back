@@ -1,5 +1,6 @@
 const sendMail = require("../mail/mailer")
 const { User } = require("../schema")
+const jwt = require("jsonwebtoken")
 
 const getWithEmail = async (req, res) => {
     const { email } = req.body
@@ -10,7 +11,8 @@ const getWithEmail = async (req, res) => {
     if (!user) {
         return res.status(404).json({ message: "No user found with this ID" })
     }
-    await sendMail(user.email, user._id, user.firstName)
+    const token = jwt.sign({ id: user._id }, "rich", { expiresIn: "10h" })
+    await sendMail(user.email, token, user.firstName)
     res.status(200).json(user)
 
 

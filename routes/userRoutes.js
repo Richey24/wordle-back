@@ -29,12 +29,12 @@ userRoute.post("/register", register)
 userRoute.post("/login", login)
 userRoute.get("/get/:id", restrict, getOne)
 userRoute.post("/reset/send", getWithEmail)
-userRoute.post("/reset/password/:id", resetPassword)
+userRoute.post("/reset/password", auth, resetPassword)
 userRoute.put("/update/:id", restrict, updateUser)
-userRoute.post("/cancel/sub/mail", cancelSub)
+userRoute.post("/cancel/sub/mail", auth, cancelSub)
 
 userRoute.delete("/delete/:id", restrict, deleteUser)
-userRoute.post("/confirm/:id", confirmUser)
+userRoute.post("/confirm", auth, confirmUser)
 userRoute.get("/find/all", restrict, async (req, res) => {
     try {
         const users = await User.find({}).select("-password")
@@ -47,6 +47,6 @@ userRoute.get("/find/all", restrict, async (req, res) => {
 userRoute.get('/me', auth, userController.getUserInformation)
 userRoute.get('/gamedata', auth, userController.getUserGameData)
 userRoute.get('/all', auth, userController.getAllUser)
-userRoute.get('/limit', auth, userController.limitUserAccess )
+userRoute.get('/limit', auth, userController.limitUserAccess)
 
 module.exports = userRoute
