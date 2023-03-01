@@ -4,6 +4,8 @@ const jwt = require("jsonwebtoken")
 const confirmMail = require("../mail/confirm")
 
 const register = async (req, res) => {
+
+     console.log(req.body)
     try {
         const body = req.body
         if (!body.username || !body.password || !body.email) {

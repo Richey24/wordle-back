@@ -26,3 +26,5 @@ exports.getWeeklyLeaderboards = async (req, res) => {
 	res.status(201).json({ leadboard: highScore})
 }
 
+
+
