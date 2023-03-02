@@ -222,11 +222,14 @@ const hebrewSchema = new mongoose.Schema({
 })
 
 const deckSchema = new mongoose.Schema({
-    deck: {
-        type: String
-    },
     color: {
         type: String
+    }
+})
+
+const logSchema = new mongoose.Schema({
+    user: {
+        type: Object
     }
 })
 
@@ -238,6 +241,7 @@ const Score = mongoose.model("Score", quizScoreSchema, "score")
 const Cart = mongoose.model("Cart", cartSchema, "cart")
 const Hebrew = mongoose.model("Hebrew", hebrewSchema, 'hebrew')
 const Deck = mongoose.model("Deck", deckSchema, 'deck')
+const Logger = mongoose.model("Logger", logSchema, 'logger')
 const Word = mongoose.model(
     'words',
     new mongoose.Schema({
@@ -247,4 +251,4 @@ const Word = mongoose.model(
 );
 
 
-module.exports = { User, Sword, Audit, Quiz, Score, Word, Cart, Hebrew, Deck }
+module.exports = { User, Sword, Audit, Quiz, Score, Word, Cart, Hebrew, Deck, Logger }
