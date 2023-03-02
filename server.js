@@ -99,6 +99,8 @@ const adminRoutes = require("./routes/adminRoutes");
 const winnerRoutes = require('./routes/winnerRoutes');
 const notificationRoutes = require('./routes/notificationRoutes')
 const hebrewRoutes = require('./routes/hebrewRoutes')
+const winnerController = require('./controller/winnerController');
+const deckRoutes = require("./routes/deckRoutes");
 
 app.get("/", (req, res) => res.send("Hello world"))
 app.use("/user", userRoute)
@@ -109,6 +111,7 @@ app.use("/score", scoreRoutes)
 app.use("/word", wordRoutes)
 app.use("/sub", subRoutes)
 app.use("/hebrew", hebrewRoutes)
+app.use("/deck", deckRoutes)
 
 app.use("/api/user", userRoute)
 app.use("/api/activities", activityRoutes)
@@ -152,7 +155,7 @@ app.post("/cancel/sub", auth, async (req, res) => {
         }
         const user = await User.findById(id)
         await stripe.subscriptions.update(user.subscriptionID, { cancel_at_period_end: true })
-        await User.findByIdAndUpdate(id, { subscriptionID: "" })
+        // await User.findByIdAndUpdate(id, { subscriptionID: "" })
         return res.status(200).json({ message: "subscription cancelled successfully" })
     } catch (error) {
         res.status(500).json({ message: "An error occurred" })
@@ -186,35 +189,36 @@ app.post("/webhook", express.raw({ type: 'application/json' }), async (req, res)
             const customer = await Cart.findOne({ sessionID: session.id })
             const expiryDate = customer.plan === "monthly" ? new Date(new Date().setMonth(new Date().getMonth() + 1)) : new Date(new Date().setMonth(new Date().getMonth() + 12))
             await User.findOneAndUpdate({ email: customer.email }, { paid: true, expiryDate: expiryDate, customerID: session.customer, subscriptionID: session.subscription, plan: customer.plan })
+            break;
         }
-        case "checkout.session.async_payment_failed": {
-            const session = event.data.object;
-            const customer = await Cart.findOne({ sessionID: session.id })
-            // failedSubMail(customer.email)
-            break
-        }
+        // case "checkout.session.async_payment_failed": {
+        //     const session = event.data.object;
+        //     const customer = await Cart.findOne({ sessionID: session.id })
+        //     failedSubMail(customer.email)
+        //     break
+        // }
         case "invoice.payment_succeeded": {
             const invoice = event.data.object;
             const user = await User.findOne({ customerID: invoice.customer })
             const expiryDate = user.plan === "monthly" ? new Date(new Date().setMonth(new Date().getMonth() + 1)) : new Date(new Date().setMonth(new Date().getMonth() + 12))
             await User.findOneAndUpdate({ customerID: invoice.customer }, { expiryDate: expiryDate })
+            break;
         }
-        case "invoice.payment_failed": {
-            const invoice = event.data.object;
-            const user = await User.findOne({ customerID: invoice.customer })
-            // failedSubMail(user.email)
-        }
-        case "customer.subscription.deleted": {
-            const session = event.data.object;
-            await User.findOneAndUpdate({ customerID: session.customer }, { paid: false, customerID: "" })
-        }
+        // case "invoice.payment_failed": {
+        //     const invoice = event.data.object;
+        //     const user = await User.findOne({ customerID: invoice.customer })
+        //     failedSubMail(user.email)
+        // }
+        // case "customer.subscription.deleted": {
+        //     const session = event.data.object;
+        //     await User.findOneAndUpdate({ customerID: session.customer }, { paid: false, customerID: "" })
+        // }
         default:
             break;
     }
 })
 
 // Cron Job functionality 
-const winnerController = require('./controller/winnerController');
 
 cron.schedule("* * * * * 6", function () {
     console.log("---------------------");
