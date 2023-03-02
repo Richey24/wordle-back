@@ -121,7 +121,7 @@ app.use('/api/notifications', notificationRoutes)
 
 //Stripe 
 const stripe = require("stripe")(process.env.STRIPE_KEY)
-const YOUR_DOMAIN = "https://israelbiblecamp.world/subscription"
+const YOUR_DOMAIN = "https://www.israelbiblecamp.world/subscription"
 
 app.post('/create-checkout-session', async (req, res) => {
     const { email, plan, id } = req.query
