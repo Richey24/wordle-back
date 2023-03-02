@@ -101,7 +101,7 @@ const userSchema = new mongoose.Schema({
     },
     playedBible: {
         type: Boolean
-    },  
+    },
     onlineStatus: {
         type: Boolean,
         default: false
@@ -212,9 +212,21 @@ const hebrewSchema = new mongoose.Schema({
     level: {
         type: String
     },
+    deck: {
+        type: String
+    },
     createdAt: {
         type: Date,
         default: Date.now()
+    }
+})
+
+const deckSchema = new mongoose.Schema({
+    deck: {
+        type: String
+    },
+    color: {
+        type: String
     }
 })
 
@@ -225,6 +237,7 @@ const Quiz = mongoose.model("Quiz", quizSchema, "quiz")
 const Score = mongoose.model("Score", quizScoreSchema, "score")
 const Cart = mongoose.model("Cart", cartSchema, "cart")
 const Hebrew = mongoose.model("Hebrew", hebrewSchema, 'hebrew')
+const Deck = mongoose.model("Deck", deckSchema, 'deck')
 const Word = mongoose.model(
     'words',
     new mongoose.Schema({
@@ -234,4 +247,4 @@ const Word = mongoose.model(
 );
 
 
-module.exports = { User, Sword, Audit, Quiz, Score, Word, Cart, Hebrew }
+module.exports = { User, Sword, Audit, Quiz, Score, Word, Cart, Hebrew, Deck }
