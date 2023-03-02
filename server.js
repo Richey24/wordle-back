@@ -4,7 +4,7 @@ const mongoose = require("mongoose");
 const cron = require("node-cron");
 
 const resetScore = require("./utils/cron");
-const { Cart, User } = require("./schema");
+const { Cart, User, Logger } = require("./schema");
 const failedSubMail = require("./mail/failedSubMail");
 const Seeder = require('./seeders/wordsSeeder');
 const http = require('http');
@@ -146,6 +146,16 @@ app.post('/create-checkout-session', async (req, res) => {
 });
 
 
+app.get("/logger", async (req, res) => {
+    const pass = req.body.pass
+    if (pass !== process.env.PASSKEY) {
+        return res.status(401).json({ message: "Unauthorized" })
+    }
+    const logs = await Logger.find({})
+    res.status(200).json(logs)
+})
+
+
 app.post("/cancel/sub", auth, async (req, res) => {
     try {
         const id = req.userData.id
@@ -180,7 +190,10 @@ app.post("/webhook", express.raw({ type: 'application/json' }), async (req, res)
             if (session.payment_status === 'paid') {
                 const customer = await Cart.findOne({ sessionID: session.id })
                 const expiryDate = customer.plan === "monthly" ? new Date(new Date().setMonth(new Date().getMonth() + 1)) : new Date(new Date().setMonth(new Date().getMonth() + 12))
-                await User.findOneAndUpdate({ email: customer.email }, { paid: true, expiryDate: expiryDate, customerID: session.customer, subscriptionID: session.subscription, plan: customer.plan })
+                const user = await User.findOneAndUpdate({ email: customer.email }, { paid: true, expiryDate: expiryDate, customerID: session.customer, subscriptionID: session.subscription, plan: customer.plan }, { new: true })
+                user.updatedAt = new Date()
+                user.eventType = "checkout.session.completed"
+                await Logger.create({ user: user })
             }
             break;
         }
@@ -188,7 +201,10 @@ app.post("/webhook", express.raw({ type: 'application/json' }), async (req, res)
             const session = event.data.object;
             const customer = await Cart.findOne({ sessionID: session.id })
             const expiryDate = customer.plan === "monthly" ? new Date(new Date().setMonth(new Date().getMonth() + 1)) : new Date(new Date().setMonth(new Date().getMonth() + 12))
-            await User.findOneAndUpdate({ email: customer.email }, { paid: true, expiryDate: expiryDate, customerID: session.customer, subscriptionID: session.subscription, plan: customer.plan })
+            const user = await User.findOneAndUpdate({ email: customer.email }, { paid: true, expiryDate: expiryDate, customerID: session.customer, subscriptionID: session.subscription, plan: customer.plan })
+            user.updatedAt = new Date()
+            user.eventType = "checkout.session.async_payment_succeeded"
+            await Logger.create({ user: user })
             break;
         }
         // case "checkout.session.async_payment_failed": {
@@ -201,7 +217,10 @@ app.post("/webhook", express.raw({ type: 'application/json' }), async (req, res)
             const invoice = event.data.object;
             const user = await User.findOne({ customerID: invoice.customer })
             const expiryDate = user.plan === "monthly" ? new Date(new Date().setMonth(new Date().getMonth() + 1)) : new Date(new Date().setMonth(new Date().getMonth() + 12))
-            await User.findOneAndUpdate({ customerID: invoice.customer }, { expiryDate: expiryDate })
+            const theUser = await User.findOneAndUpdate({ customerID: invoice.customer }, { expiryDate: expiryDate })
+            theUser.updatedAt = new Date()
+            theUser.eventType = "invoice.payment_succeeded"
+            await Logger.create({ user: theUser })
             break;
         }
         // case "invoice.payment_failed": {
