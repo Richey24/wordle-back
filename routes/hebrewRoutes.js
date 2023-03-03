@@ -6,16 +6,7 @@ const getOneHebrew = require('../hebrewController/getOneHebrew');
 const updateHebrew = require('../hebrewController/updateHebrew');
 const multer = require('multer');
 const getByDeck = require('../hebrewController/getByDeck');
-const storage = multer.diskStorage({
-    destination: (req, file, callback) => {
-        callback(null, "uploads/")
-    },
-    filename: (req, file, callback) => {
-        file.filename = `${Date.now()}correctImage.jpeg`
-        callback(null, `${Date.now()}correctImage.jpeg`)
-    }
-})
-const upload = multer({ storage: storage })
+const upload = multer()
 const hebrewRoutes = express.Router();
 
 // const restrict = async (req, res, next) => {
