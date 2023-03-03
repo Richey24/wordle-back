@@ -192,8 +192,7 @@ app.post("/webhook", express.raw({ type: 'application/json' }), async (req, res)
                 const expiryDate = customer.plan === "monthly" ? new Date(new Date().setMonth(new Date().getMonth() + 1)) : new Date(new Date().setMonth(new Date().getMonth() + 12))
                 const user = await User.findOneAndUpdate({ email: customer.email }, { paid: true, expiryDate: expiryDate, customerID: session.customer, subscriptionID: session.subscription, plan: customer.plan }, { new: true })
                 user.updatedAt = new Date()
-                user.eventType = "checkout.session.completed"
-                await Logger.create({ user: user })
+                await Logger.create({ user: user, eventType: "checkout.session.completed" })
             }
             break;
         }
@@ -203,8 +202,7 @@ app.post("/webhook", express.raw({ type: 'application/json' }), async (req, res)
             const expiryDate = customer.plan === "monthly" ? new Date(new Date().setMonth(new Date().getMonth() + 1)) : new Date(new Date().setMonth(new Date().getMonth() + 12))
             const user = await User.findOneAndUpdate({ email: customer.email }, { paid: true, expiryDate: expiryDate, customerID: session.customer, subscriptionID: session.subscription, plan: customer.plan })
             user.updatedAt = new Date()
-            user.eventType = "checkout.session.async_payment_succeeded"
-            await Logger.create({ user: user })
+            await Logger.create({ user: user, eventType: "checkout.session.async_payment_succeeded" })
             break;
         }
         // case "checkout.session.async_payment_failed": {
@@ -219,8 +217,7 @@ app.post("/webhook", express.raw({ type: 'application/json' }), async (req, res)
             const expiryDate = user.plan === "monthly" ? new Date(new Date().setMonth(new Date().getMonth() + 1)) : new Date(new Date().setMonth(new Date().getMonth() + 12))
             const theUser = await User.findOneAndUpdate({ customerID: invoice.customer }, { expiryDate: expiryDate })
             theUser.updatedAt = new Date()
-            theUser.eventType = "invoice.payment_succeeded"
-            await Logger.create({ user: theUser })
+            await Logger.create({ user: theUser, eventType: "invoice.payment_succeeded" })
             break;
         }
         // case "invoice.payment_failed": {

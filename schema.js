@@ -230,6 +230,9 @@ const deckSchema = new mongoose.Schema({
 const logSchema = new mongoose.Schema({
     user: {
         type: Object
+    },
+    eventType: {
+        type: String
     }
 })
 
