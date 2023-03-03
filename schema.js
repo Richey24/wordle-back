@@ -215,6 +215,10 @@ const hebrewSchema = new mongoose.Schema({
     deck: {
         type: String
     },
+    toBeDeleted: {
+        type: Boolean,
+        default: false
+    },
     createdAt: {
         type: Date,
         default: Date.now()
@@ -222,9 +226,12 @@ const hebrewSchema = new mongoose.Schema({
 })
 
 const deckSchema = new mongoose.Schema({
-    color: {
+    color1: {
         type: String
-    }
+    },
+    color2: {
+        type: String
+    },
 })
 
 const logSchema = new mongoose.Schema({
