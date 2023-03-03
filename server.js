@@ -155,6 +155,15 @@ app.get("/logger", async (req, res) => {
     res.status(200).json(logs)
 })
 
+app.delete("/logger/delete", async (req, res) => {
+    const pass = req.body.pass
+    if (pass !== process.env.PASSKEY) {
+        return res.status(401).json({ message: "Unauthorized" })
+    }
+    await Logger.deleteMany({})
+    res.status(200).json({ message: "deleted successfully" })
+})
+
 
 app.post("/cancel/sub", auth, async (req, res) => {
     try {
