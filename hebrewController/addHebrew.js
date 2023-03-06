@@ -9,6 +9,7 @@ const addHebrew = async (req, res) => {
     // try {
     const body = req.body
     const file = req.file
+    console.log(file);
     // if (!body.paleoHebrewText || !body.english) {
     //     return res.status(400).json({ message: "More informations are required" })
     // }

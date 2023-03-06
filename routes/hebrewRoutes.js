@@ -6,7 +6,7 @@ const getOneHebrew = require('../hebrewController/getOneHebrew');
 const updateHebrew = require('../hebrewController/updateHebrew');
 const multer = require('multer');
 const getByDeck = require('../hebrewController/getByDeck');
-const upload = multer()
+const upload = multer({dest: "./upload"})
 const hebrewRoutes = express.Router();
 
 // const restrict = async (req, res, next) => {
