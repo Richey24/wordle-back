@@ -23,7 +23,7 @@ hebrewRoutes.post("/create", upload.single("hebrew"), addHebrew)
 hebrewRoutes.get("/get/all", getAllHebrew)
 hebrewRoutes.get("/get/deck/:deck", getByDeck)
 hebrewRoutes.get("/get/one/:id", getOneHebrew)
-hebrewRoutes.put("/update/:id", updateHebrew)
+hebrewRoutes.put("/update/:id", upload.single("hebrew"), updateHebrew)
 hebrewRoutes.delete("/delete/:id", deleteHebrew)
 
 module.exports = hebrewRoutes
