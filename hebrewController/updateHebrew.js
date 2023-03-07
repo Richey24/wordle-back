@@ -4,6 +4,7 @@ const updateHebrew = async (req, res) => {
     try {
         const id = req.params.id
         const body = req.body
+        console.log(body);
         if (!id) {
             return res.status(400).json({ message: "ID is required" })
         }
