@@ -95,6 +95,10 @@ const userSchema = new mongoose.Schema({
     playedTrivial: {
         type: Boolean
     },
+    deckLevel: {
+        type: Number,
+        default: 1
+    },
     sound: {
         type: Boolean,
         default: true
