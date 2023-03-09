@@ -1,5 +1,6 @@
 const express = require('express');
 const addDeck = require('../deckController/addDeck');
+const deleteDeck = require('../deckController/deleteDeck');
 const getAllDeck = require('../deckController/getAllDeck');
 const deckRoutes = express.Router()
 
@@ -16,5 +17,6 @@ const deckRoutes = express.Router()
 
 deckRoutes.post("/create", addDeck)
 deckRoutes.get("/get/all", getAllDeck)
+deckRoutes.delete("/delete/:id", deleteDeck)
 
 module.exports = deckRoutes
