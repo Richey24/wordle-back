@@ -25,13 +25,14 @@ const updateHebrew = async (req, res) => {
             if (response._response.status !== 201) {
                 console.log("error");
             }
+
+            fs.unlink(file.path, (err) => {
+                if (err) {
+                    console.log(err);
+                }
+            })
+            body.correctImage = file.filename
         }
-        fs.unlink(file.path, (err) => {
-            if (err) {
-                console.log(err);
-            }
-        })
-        body.correctImage = file.filename
         await Hebrew.findByIdAndUpdate(id, body)
         res.status(200).json({ message: "Updated Successfully" })
     } catch (error) {
