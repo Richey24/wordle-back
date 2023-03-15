@@ -89,6 +89,11 @@ const userSchema = new mongoose.Schema({
         type: Number,
         require: false
     },
+    hebrewScore: {
+        type: Number,
+        require: false,
+        default: 0
+    },
     playedHang: {
         type: Boolean
     },
