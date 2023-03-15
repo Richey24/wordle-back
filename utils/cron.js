@@ -8,6 +8,7 @@ const resetScore = () => {
             await User.findByIdAndUpdate(user._id, { dailyWQS: 0 })
             await User.findByIdAndUpdate(user._id, { dailyBQS: 0 })
             await User.findByIdAndUpdate(user._id, { dailyHS: 0 })
+            await User.findByIdAndUpdate(user._id, { hebrewScore: 0 })
         })
         await Score.deleteMany({})
     })
