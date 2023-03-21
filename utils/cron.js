@@ -19,6 +19,7 @@ const resetScore = () => {
             await User.findByIdAndUpdate(user._id, { playedTrivial: false })
             await User.findByIdAndUpdate(user._id, { playedBible: false })
             await User.findByIdAndUpdate(user._id, { playedCross: false })
+            await User.findByIdAndUpdate(user._id, { playedHebrew: false })
         })
     })
 }
